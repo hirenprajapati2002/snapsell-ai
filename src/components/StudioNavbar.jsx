@@ -1,10 +1,20 @@
 // src/components/StudioNavbar.jsx
 import React, { useState, useRef, useEffect } from "react";
 import { ChevronDown, Plus, UploadCloud } from "lucide-react";
+import { useAuth } from '../contexts/AuthContext';
 
 const StudioNavbar = () => {
+  const { user, logout, openLoginModal } = useAuth();
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef();
+
+  const handleAuthClick = () => {
+    if (user) {
+      logout();
+    } else {
+      openLoginModal();
+    }
+  };
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -48,8 +58,11 @@ const StudioNavbar = () => {
           )}
         </div>
 
-        <button className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-1.5 rounded-lg text-sm font-medium">
-          Login
+        <button
+          onClick={handleAuthClick}
+          className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-1.5 rounded-lg text-sm font-medium"
+        >
+          {user ? `Welcome, ${user.name}` : 'Login'}
         </button>
       </div>
     </nav>
