@@ -1,0 +1,28 @@
+.swiper-button-prev,
+.swiper-button-next {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.swiper:hover .swiper-button-prev,
+.swiper:hover .swiper-button-next {
+  opacity: 1;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  color: white !important;
+  background-color: rgba(0, 0, 0, 0.4);
+  width: 32px;
+  height: 32px;
+  border-radius: 9999px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  font-size: 14px;
+  font-weight: bold;
+}
