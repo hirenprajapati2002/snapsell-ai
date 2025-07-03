@@ -5,6 +5,17 @@ import ObjectRemover from '../../assets/videos/object_remover.mp4';
 import ObjectReplacer from '../../assets/videos/object_replacer.mp4';
 import PhotoEnhancer from '../../assets/videos/photo_enhancer.mp4';
 import UncropImage from '../../assets/videos/Uncrop_image.mp4';
+import Footer from '../common/Footer';
+
+// Import social icons
+import FacebookIcon from '../../assets/images/social-icons/facebook.svg';
+import InstagramIcon from '../../assets/images/social-icons/instagram.svg';
+import PinterestIcon from '../../assets/images/social-icons/pinterest.svg';
+import ShopifyIcon from '../../assets/images/social-icons/shopify.svg';
+import TwitterIcon from '../../assets/images/social-icons/twitter.svg';
+import LinkedInIcon from '../../assets/images/social-icons/linkedin.svg';
+import AmazonIcon from '../../assets/images/social-icons/amazon.svg';
+import EtsyIcon from '../../assets/images/social-icons/etsy.svg';
 
 
 const tools = [
@@ -96,86 +107,43 @@ const ToolsSection = () => {
                 </div>
                 {/* Marketplace Support Section */}
                 <div className="mt-16 text-center">
-                    <p className="text-gray-800 text-lg mb-6">
-                        Suitable for all <span className="font-semibold">marketplaces, platform</span>, and channel
+                    <h3 className="text-2xl font-semibold text-black mb-2">Compatible With All Platforms</h3>
+                    <p className="text-gray-600 text-lg mb-6">
+                        Use your enhanced visuals on all <span className="font-semibold">marketplaces, platforms</span>, and social channels
                     </p>
-                    <div className="flex justify-center flex-wrap items-center gap-6">
-                        <img src="/src/assets/icons/facebook.svg" alt="Facebook" className="h-8 w-8" />
-                        <img src="/src/assets/icons/instagram.svg" alt="Instagram" className="h-8 w-8" />
-                        <img src="/src/assets/icons/pinterest.svg" alt="Pinterest" className="h-8 w-8" />
-                        <img src="/src/assets/icons/shopify.svg" alt="Shopify" className="h-8 w-8" />
-                        <img src="/src/assets/icons/twitter.svg" alt="Twitter" className="h-8 w-8" />
-                        <img src="/src/assets/icons/tiktok.svg" alt="Tiktok" className="h-8 w-8" />
-                        <img src="/src/assets/icons/linkedin.svg" alt="LinkedIn" className="h-8 w-8" />
-                        <img src="/src/assets/icons/snapchat.svg" alt="Snapchat" className="h-8 w-8" />
-                        <img src="/src/assets/icons/amazon.svg" alt="Amazon" className="h-8 w-8" />
-                        <img src="/src/assets/icons/etsy.svg" alt="Etsy" className="h-8 w-8" />
-                        <img src="/src/assets/icons/ebay.svg" alt="eBay" className="h-8 w-8" />
-                        <img src="/src/assets/icons/flipkart.svg" alt="Flipkart" className="h-8 w-8" />
-                        <span className="text-gray-600 text-sm font-medium">+more</span>
-                    </div>
-                </div>
-            </div>
-            {/* API Integration Section - Break out of container for full width */}
-            <div className="relative mt-24 -mx-[10px] md:-mx-[50px] pb-24">
-                {/* Full-width peach background for lower half */}
-                <div className="absolute inset-0 top-1/3 bg-[#fef1eb]"></div>
-
-                {/* Content container */}
-                <div className="relative px-[10px] md:px-[50px]">
-                    <div className="max-w-6xl mx-auto bg-white border border-gray-200 shadow-xl rounded-2xl overflow-hidden flex flex-col lg:flex-row">
-
-                        {/* Left Text Block */}
-                        <div className="w-full lg:w-1/2 p-8 md:p-12 flex flex-col justify-center">
-                            <h2 className="text-3xl font-bold text-black leading-tight mb-2">
-                                Integrate <br />
-                                <span className="font-extrabold">Snapsell.AI's API</span>
-                            </h2>
-                            <p className="text-gray-600 mt-2 mb-6">
-                                Join thousands of businesses and developers integrating Snapsell.AI's AI infrastructure into their apps, websites, and workflows
-                            </p>
-                            <div className="flex flex-col sm:flex-row gap-4">
-                                <button className="bg-[#7B3FF7] text-white font-semibold px-6 py-3 rounded-xl hover:bg-[#682de9] transition">
-                                    Get API Key
-                                </button>
-                                <button className="border border-[#7B3FF7] text-[#7B3FF7] font-semibold px-6 py-3 rounded-xl hover:bg-[#f1ebff] transition">
-                                    Documentation
-                                </button>
-                            </div>
+                    <div className="flex justify-center flex-wrap items-center gap-4 md:gap-6">
+                        <div className="h-16 w-16 bg-white rounded-xl shadow-sm flex items-center justify-center p-3 hover:shadow-md transition-all transform hover:-translate-y-1">
+                            <img src={FacebookIcon} alt="Facebook" className="h-10 w-10" />
                         </div>
-
-                        {/* Right Code Block */}
-                        <div className="w-full lg:w-1/2 p-6 md:p-8 flex items-center justify-center">
-                            <div className="bg-[#1c1f26] text-white rounded-xl p-6 font-mono text-sm w-full shadow-inner overflow-x-auto relative">
-                                {/* Copy Button */}
-                                <button className="absolute top-4 right-4 p-2 bg-gray-700 hover:bg-gray-600 rounded-md transition-colors">
-                                    <svg className="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                                    </svg>
-                                </button>
-
-                                <pre className="whitespace-pre-wrap pr-12">
-                                    <code>
-                                        <span className="text-purple-400">const</span> <span className="text-blue-300">axios</span> <span className="text-white">=</span> <span className="text-blue-300">require</span><span className="text-white">(</span><span className="text-orange-300">"axios"</span><span className="text-white">);</span>
-                                        {'\n\n'}
-                                        <span className="text-purple-400">const</span> <span className="text-blue-300">url</span> <span className="text-white">=</span>
-                                        {'\n  '}<span className="text-orange-300">"https://prodapi.phot.ai/external/api/v3/user_activity/remove-background"</span><span className="text-white">;</span>
-                                        {'\n'}
-                                        <span className="text-purple-400">const</span> <span className="text-blue-300">headers</span> <span className="text-white">=</span> <span className="text-white">{'{'}</span>
-                                        {'\n  '}<span className="text-orange-300">"x-api-key"</span><span className="text-white">:</span> <span className="text-orange-300">"&lt;PhotAI API Key&gt;"</span><span className="text-white">,</span>
-                                        {'\n  '}<span className="text-orange-300">"Content-Type"</span><span className="text-white">:</span> <span className="text-orange-300">"application/json"</span>
-                                        {'\n'}<span className="text-white">{'}'}</span><span className="text-white">;</span>
-                                        {'\n'}
-                                        <span className="text-purple-400">const</span> <span className="text-blue-300">data</span> <span className="text-white">=</span> <span className="text-white">{'{'}</span>
-                                        {'\n  '}<span className="text-blue-300">source_url</span><span className="text-white">:</span> <span className="text-orange-300">"https://ai-image-editor-wasabi-bucket.phot.ai/bg_replacer_assets/original_images/chair.webp"</span> <span className="text-gray-400">// Replace with the</span> <span className="text-yellow-300">URL</span> <span className="text-gray-400">of your input image</span>
-                                        {'\n'}<span className="text-white">{'}'}</span><span className="text-white">;</span>
-                                    </code>
-                                </pre>
-                            </div>
+                        <div className="h-16 w-16 bg-white rounded-xl shadow-sm flex items-center justify-center p-3 hover:shadow-md transition-all transform hover:-translate-y-1">
+                            <img src={InstagramIcon} alt="Instagram" className="h-10 w-10" />
                         </div>
-                    </div>
-                </div>
+                        <div className="h-16 w-16 bg-white rounded-xl shadow-sm flex items-center justify-center p-3 hover:shadow-md transition-all transform hover:-translate-y-1">
+                            <img src={PinterestIcon} alt="Pinterest" className="h-10 w-10" />
+                        </div>
+                        <div className="h-16 w-16 bg-white rounded-xl shadow-sm flex items-center justify-center p-3 hover:shadow-md transition-all transform hover:-translate-y-1">
+                            <img src={ShopifyIcon} alt="Shopify" className="h-10 w-10" />
+                        </div>
+                        <div className="h-16 w-16 bg-white rounded-xl shadow-sm flex items-center justify-center p-3 hover:shadow-md transition-all transform hover:-translate-y-1">
+                            <img src={TwitterIcon} alt="Twitter" className="h-10 w-10" />
+                        </div>
+                        <div className="h-16 w-16 bg-white rounded-xl shadow-sm flex items-center justify-center p-3 hover:shadow-md transition-all transform hover:-translate-y-1">
+                            <img src={LinkedInIcon} alt="LinkedIn" className="h-10 w-10" />
+                        </div>
+                        <div className="h-16 w-16 bg-white rounded-xl shadow-sm flex items-center justify-center p-3 hover:shadow-md transition-all transform hover:-translate-y-1">
+                            <img src={AmazonIcon} alt="Amazon" className="h-10 w-10" />
+                        </div>
+                        <div className="h-16 w-16 bg-white rounded-xl shadow-sm flex items-center justify-center p-3 hover:shadow-md transition-all transform hover:-translate-y-1">
+                            <img src={EtsyIcon} alt="Etsy" className="h-10 w-10" />
+                        </div>
+                        <button className="h-16 px-6 bg-gray-50 rounded-xl text-gray-600 text-sm font-medium hover:bg-gray-100 transition-colors flex items-center justify-center shadow-sm hover:shadow-md transition-all transform hover:-translate-y-1">
+                            <span className="text-[#7B3FF7] font-semibold">+12 more</span>
+                        </button>
+                    </div>                </div>
             </div>
+
+            {/* Footer Section */}
+            <Footer />
         </section>
     );
 };

@@ -25,7 +25,7 @@ const Navbar = () => {
         </div>
 
         {/* Links */}
-        <div className="hidden md:flex items-center space-x-8">
+        {/* <div className="hidden md:flex items-center space-x-8">
           <div className="flex items-center space-x-1 text-gray-300 hover:text-white cursor-pointer">
             <span>All Tools</span>
             <ChevronDown className="w-4 h-4" />
@@ -34,7 +34,7 @@ const Navbar = () => {
           <a href="#" className="text-gray-300 hover:text-white">APIs</a>
           <a href="#" className="text-gray-300 hover:text-white">Pricing</a>
           <a href="#" className="text-gray-300 hover:text-white">Resources</a>
-        </div>
+        </div> */}
 
         {/* Buttons */}
         <div className="flex items-center space-x-4">
@@ -46,9 +46,9 @@ const Navbar = () => {
           >
             <button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium">
               Start Creating
-              <span className="absolute -top-1 -right-1 bg-pink-500 text-white text-xs px-1.5 py-0.5 rounded">
+              {/* <span className="absolute -top-1 -right-1 bg-pink-500 text-white text-xs px-1.5 py-0.5 rounded">
                 New
-              </span>
+              </span> */}
             </button>
           </a>
           <button

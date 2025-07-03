@@ -9,7 +9,7 @@ const HeroSection = () => {
         <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">
           Turn Traffic into Sales with
         </h1>
-        
+
         {/* Gradient Text */}
         <h2 className="text-5xl md:text-6xl font-bold mb-8">
           <span className="bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent">

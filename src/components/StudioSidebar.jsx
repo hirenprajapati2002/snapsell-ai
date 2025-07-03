@@ -9,8 +9,14 @@ import {
   Settings,
   ChevronDown,
   ChevronUp,
+  Home,
+  FolderOpen,
+  Megaphone,
+  Share2,
+  Calendar,
+  TrendingUp,
 } from "lucide-react";
-import { Link } from "react-router-dom"; // <-- import this
+import { Link } from "react-router-dom";
 
 // Reusable sidebar item
 // eslint-disable-next-line no-unused-vars
@@ -45,6 +51,48 @@ const StudioSidebar = () => {
 
         {/* Menu */}
         <div className="space-y-2">
+          {/* Dashboard Home */}
+          <Link to="/dashboard">
+            <SidebarItem icon={Home} label="Dashboard" />
+          </Link>
+
+          {/* Upload Products */}
+          <Link to="/upload-products">
+            <SidebarItem icon={Upload} label="Upload Products" />
+          </Link>
+
+          {/* Catalogs */}
+          <Link to="/catalogs">
+            <SidebarItem icon={FolderOpen} label="Catalogs" />
+          </Link>
+
+          {/* Campaigns */}
+          <Link to="/campaigns">
+            <SidebarItem icon={Megaphone} label="Campaigns" />
+          </Link>
+
+          {/* Shared Content */}
+          <Link to="/shared-content">
+            <SidebarItem icon={Share2} label="Shared Content" />
+          </Link>
+
+          {/* Local Events */}
+          <Link to="/local-events">
+            <SidebarItem icon={Calendar} label="Local Events (Sync)" />
+          </Link>
+
+          {/* Insights */}
+          <Link to="/insights">
+            <SidebarItem icon={TrendingUp} label="Insights" />
+          </Link>
+
+          <hr className="my-4 border-gray-200" />
+
+          {/* Create Tools Section */}
+          <div className="text-xs text-gray-500 uppercase tracking-wide px-3 py-2 font-semibold">
+            Create Tools
+          </div>
+
           <Link to="/create">
             <SidebarItem icon={Plus} label="Create" />
           </Link>
