@@ -22,7 +22,7 @@ const templateService = {
   // Update template with new image and text
   async updateTemplate(templateId, updateData) {
     try {
-      const response = await apiClient.put(`/templates/${templateId}`, updateData);
+      const response = await apiClient.post(`/templates/${templateId}`, updateData);
       return {
         success: true,
         data: response.data

@@ -106,7 +106,7 @@ const StudioSidebar = () => {
                     ? 'text-purple-700 bg-[#f1efff] hover:bg-[#e7e4ff]'
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}>
-                  Predefined Templates
+                  Snapsell.AI Templates
                 </div>
               </Link>
               <Link to="/custom-ads">
