@@ -1,17 +1,19 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
+import { useAuth } from "../contexts/AuthContext";
 
 const usePrivateRoutes = () => {
-  const token = localStorage.getItem("authToken");
+  const { user, isLoading } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (token == null) {
-      navigate("/");
-      Swal.fire('You need to login or signup to access this page');
+    // Wait for auth context to finish loading
+    if (!isLoading) {
+      if (!user) {
+        navigate('/');
+      }
     }
-  }, [token, navigate]);
+  }, [user, isLoading, navigate]);
 
   return;
 };

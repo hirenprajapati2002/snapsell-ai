@@ -1,27 +1,24 @@
 import React, { useState } from "react";
 import {
-  ImageIcon,
-  ChevronDown,
-  ChevronUp,
   Home,
+  ImageIcon,
   FolderOpen,
   Megaphone,
   Share2,
   Calendar,
   TrendingUp,
+  ChevronDown,
+  ChevronUp,
   Images,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import CatalogModal from "../components/catalog/CatalogModal";
- 
+import TemplateSelectionModal from "../components/catalog/TemplateSelectionModal";
+
 // Reusable sidebar item
 const SidebarItem = ({ icon: Icon, label, active, onClick, isDropdown }) => (
   <div
-    onClick={(e) => {
-      if (onClick) {
-        onClick(e);
-      }
-    }}
+    onClick={onClick}
     className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer hover:bg-gray-100 text-sm font-medium ${active ? "bg-[#f1efff] text-purple-700" : "text-gray-700"
       }`}
   >
@@ -34,13 +31,15 @@ const SidebarItem = ({ icon: Icon, label, active, onClick, isDropdown }) => (
     )}
   </div>
 );
- 
+
 const StudioSidebar = () => {
   const location = useLocation();
   const [isAIBannerOpen, setIsAIBannerOpen] = useState(false);
   const [isCatalogOpen, setIsCatalogOpen] = useState(false);
-  const [showCatalogModal, setShowCatalogModal] = useState(false); // ✅ Modal state
- 
+  const [showTemplateModal, setShowTemplateModal] = useState(false);
+  const [showCatalogModal, setShowCatalogModal] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
+
   // Check if current route is under AI Banners and keep it open
   React.useEffect(() => {
     if (location.pathname === '/custom-ads' || location.pathname === '/predefined-templates') {
@@ -50,25 +49,34 @@ const StudioSidebar = () => {
       setIsCatalogOpen(true);
     }
   }, [location.pathname]);
- 
+
   const toggleAIBanner = (e) => {
     e.preventDefault();
     e.stopPropagation();
     setIsAIBannerOpen(!isAIBannerOpen);
   };
- 
+
   const toggleCatalogs = (e) => {
     e.preventDefault();
     e.stopPropagation();
     setIsCatalogOpen(!isCatalogOpen);
   };
- 
-  const handleCatalogSubmit = (formData) => {
-    console.log("Catalog Submitted:", formData);
-    // TODO: Call API to save catalog data
-    setShowCatalogModal(false);
+
+  const handleCreateCatalog = () => {
+    setShowTemplateModal(true);
   };
- 
+
+  const handleTemplateSelect = (template) => {
+    setSelectedTemplate(template);
+    setShowCatalogModal(true);
+  };
+
+  const handleCatalogSubmit = () => {
+    // Modal will be closed by StepperForm after successful API call
+    setShowCatalogModal(false);
+    setSelectedTemplate(null);
+  };
+
   return (
     <aside className="w-60 bg-white h-[calc(100vh-4rem)] border-r px-4 py-6 flex flex-col justify-between fixed top-16 left-0 z-20">
       <div>
@@ -76,7 +84,7 @@ const StudioSidebar = () => {
         {/* <div className="mb-8 flex items-center text-2xl font-extrabold text-gray-800">
           Snapsell.<span className="text-purple-700">AI</span>
         </div> */}
- 
+
         {/* Menu */}
         <div className="space-y-2">
           {/* Dashboard Home */}
@@ -87,7 +95,7 @@ const StudioSidebar = () => {
               active={location.pathname === '/dashboard'}
             />
           </Link>
- 
+
           {/* AI Banner Dropdown */}
           <SidebarItem
             icon={ImageIcon}
@@ -96,7 +104,7 @@ const StudioSidebar = () => {
             onClick={toggleAIBanner}
             isDropdown
           />
- 
+
           {/* AI Banner Dropdown links */}
           {isAIBannerOpen && (
             <div className="ml-6 space-y-1">
@@ -120,7 +128,7 @@ const StudioSidebar = () => {
               </Link>
             </div>
           )}
- 
+
           {/* My Media */}
           <Link to="/my-media">
             <SidebarItem
@@ -129,12 +137,12 @@ const StudioSidebar = () => {
               active={location.pathname === '/my-media'}
             />
           </Link>
- 
+
           {/* Catalogs Section */}
           {/* <Link to="/catalogs">
             <SidebarItem icon={FolderOpen} label="Catalogs" />
           </Link> */}
- 
+
           <SidebarItem
             icon={FolderOpen}
             label="Catalogs"
@@ -142,22 +150,18 @@ const StudioSidebar = () => {
             onClick={toggleCatalogs}
             isDropdown
           />
- 
+
           {/* Catalog Dropdown */}
           {isCatalogOpen && (
             <div className="ml-6 space-y-1">
-              {/* ✅ Create Catalog opens modal */}
-              <div
+              {/* ✅ Create Catalog opens template selection modal */}
+              <div 
+                onClick={handleCreateCatalog}
                 className="text-sm text-gray-700 px-3 py-1 rounded cursor-pointer hover:bg-gray-100"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setShowCatalogModal(true);
-                }}
               >
                 Create Catalog
               </div>
- 
+
               {/* ✅ My Catalogs links to the catalog page */}
               <Link to="/catalogs">
                 <div className={`text-sm px-3 py-1 rounded cursor-pointer ${
@@ -170,43 +174,49 @@ const StudioSidebar = () => {
               </Link>
             </div>
           )}
- 
-          {/* ✅ Catalog Modal Popup */}
-          <CatalogModal
-            isOpen={showCatalogModal}
-            onClose={() => setShowCatalogModal(false)}
-            onSubmit={handleCatalogSubmit}
-          />
- 
+
           {/* Campaigns */}
           <Link to="/campaigns">
             <SidebarItem icon={Megaphone} label="Campaigns" />
           </Link>
- 
+
           {/* Shared Content */}
           <Link to="/shared-content">
             <SidebarItem icon={Share2} label="Shared Content" />
           </Link>
- 
+
           {/* Local Events */}
           <Link to="/local-events">
             <SidebarItem icon={Calendar} label="Local Events (Sync)" />
           </Link>
- 
+
           {/* Insights */}
           <Link to="/insights">
             <SidebarItem icon={TrendingUp} label="Insights" />
           </Link>
- 
- 
-         
- 
- 
- 
+
         </div>
       </div>
+
+      {/* Template Selection Modal */}
+      <TemplateSelectionModal
+        isOpen={showTemplateModal}
+        onClose={() => setShowTemplateModal(false)}
+        onTemplateSelect={handleTemplateSelect}
+      />
+
+      {/* ✅ Catalog Modal Popup */}
+      <CatalogModal
+        isOpen={showCatalogModal}
+        onClose={() => {
+          setShowCatalogModal(false);
+          setSelectedTemplate(null);
+        }}
+        onSubmit={handleCatalogSubmit}
+        selectedTemplate={selectedTemplate}
+      />
     </aside>
   );
 };
- 
+
 export default StudioSidebar;

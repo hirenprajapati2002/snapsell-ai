@@ -26,6 +26,7 @@ const AppRoutes = () => {
       <Route path="/predefined-templates" element={<PredefinedTemplatesPage />} />
       <Route path="/my-catalogs" element={<CatalogPage />} />
       <Route path="/catalogs" element={<CatalogPage />} />
+      <Route path="/create-catalog" element={<CreatePage />} />
     </Routes>
   );
 };

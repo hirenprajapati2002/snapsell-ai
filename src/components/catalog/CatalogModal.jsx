@@ -1,8 +1,13 @@
 import React from 'react';
 import StepperForm from '../common/StepperForm';
 
-const CatalogModal = ({ isOpen, onClose, onSubmit }) => {
+const CatalogModal = ({ isOpen, onClose, onSubmit, selectedTemplate }) => {
   if (!isOpen) return null;
+
+  const handleSubmit = (formData) => {
+    // Close the modal when form is successfully submitted
+    onClose();
+  };
 
   const steps = [
     {
@@ -15,11 +20,7 @@ const CatalogModal = ({ isOpen, onClose, onSubmit }) => {
     },
     {
       title: 'Products',
-      fields: [
-        { name: 'productName', placeholder: 'Enter product name', type: 'text' },
-        { name: 'productPrice', placeholder: 'Enter product price', type: 'text' },
-        { name: 'productImage', type: 'file', accept: 'image/*' },
-      ],
+      fields: [], // Products are handled with custom UI in StepperForm
     },
     {
       title: 'Processing',
@@ -42,10 +43,14 @@ const CatalogModal = ({ isOpen, onClose, onSubmit }) => {
 
         {/* Centered Header */}
         <h2 className="text-center text-xl font-semibold text-gray-800 mb-6">
-          Create Catalog
+          Create Catalog - Template {selectedTemplate?.id || 'Selected'}
         </h2>
 
-        <StepperForm steps={steps} onSubmit={onSubmit} />
+        <StepperForm 
+          steps={steps} 
+          onSubmit={handleSubmit} 
+          template_id={selectedTemplate?.id}
+        />
       </div>
     </div>
   );

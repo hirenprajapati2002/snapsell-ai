@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage';
 import CreatePage from './pages/CreatePage';
 import AppRoutes from './routes/AppRoutes';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { ToastProvider } from './contexts/ToastContext';
 import AuthModal from './components/AuthModal';
 import LoadingSpinner from './components/LoadingSpinner';
 
@@ -33,7 +34,9 @@ const AppContent = () => {
 const App = () => {
   return (
     <AuthProvider>
-      <AppContent />
+      <ToastProvider>
+        <AppContent />
+      </ToastProvider>
     </AuthProvider>
   );
 };
