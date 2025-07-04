@@ -2,6 +2,7 @@ import React from 'react';
 import StudioLayout from '../layouts/StudioLayout';
 import AdHeroSection from '../components/common/AI-banners/AdHeroSection';
 import AdFooterSection from '../components/common/AI-banners/AdFooterSection';
+import PredefinedTemplatesSection from '../components/common/AI-banners/PredefinedTemplatesSection';
 import productImage from '../assets/ads/social-ads.png';
 
 const SocialAds = () => {
@@ -15,6 +16,11 @@ const SocialAds = () => {
   buttonText="Start Now"
   image={productImage}
 />
+
+        {/* Predefined Templates Section */}
+        <div className="my-8">
+          <PredefinedTemplatesSection />
+        </div>
 
         <AdFooterSection />
 </>

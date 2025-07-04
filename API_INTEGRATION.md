@@ -153,6 +153,62 @@ Response Success (200):
 }
 ```
 
+### Image Generation Endpoints
+
+#### 1. Generate Image
+```
+POST /generate-image
+Content-Type: multipart/form-data
+Authorization: Bearer <jwt_token>
+
+Form Data:
+- prompt: "A modern living room interior featuring a sleek sofa..."
+- image: [optional] image file for image-to-image generation
+
+Response Success (200):
+{
+  "success": true,
+  "image_url": "https://api.example.com/generated-images/image-123.png",
+  "prompt": "A modern living room interior featuring a sleek sofa...",
+  "generation_id": "gen_123456",
+  "created_at": "2025-01-01T00:00:00.000Z"
+}
+
+Response Error (400):
+{
+  "success": false,
+  "message": "Prompt is required"
+}
+
+Response Error (429):
+{
+  "success": false,
+  "message": "Rate limit exceeded. Please try again later."
+}
+```
+
+#### 2. Get Generation History
+```
+GET /generate-image/history
+Authorization: Bearer <jwt_token>
+
+Response Success (200):
+{
+  "success": true,
+  "generations": [
+    {
+      "id": "gen_123456",
+      "prompt": "A modern living room interior...",
+      "image_url": "https://api.example.com/generated-images/image-123.png",
+      "created_at": "2025-01-01T00:00:00.000Z"
+    }
+  ],
+  "total": 1,
+  "page": 1,
+  "limit": 10
+}
+```
+
 ## Error Handling
 
 The API returns consistent error responses with the following structure:

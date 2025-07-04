@@ -1,12 +1,6 @@
 import React, { useState } from "react";
 import {
-  Plus,
   ImageIcon,
-  Wand2,
-  Upload,
-  LayoutDashboard,
-  Palette,
-  Settings,
   ChevronDown,
   ChevronUp,
   Home,
@@ -17,14 +11,17 @@ import {
   TrendingUp,
   Images,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import CatalogModal from "../components/catalog/CatalogModal";
 
 // Reusable sidebar item
-// eslint-disable-next-line no-unused-vars
-const SidebarItem = ({ icon: Icon, label, active, beta, onClick, isDropdown,isCatalogOpen }) => (
+const SidebarItem = ({ icon: Icon, label, active, onClick, isDropdown }) => (
   <div
-    onClick={onClick}
+    onClick={(e) => {
+      if (onClick) {
+        onClick(e);
+      }
+    }}
     className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer hover:bg-gray-100 text-sm font-medium ${active ? "bg-[#f1efff] text-purple-700" : "text-gray-700"
       }`}
   >
@@ -32,21 +29,39 @@ const SidebarItem = ({ icon: Icon, label, active, beta, onClick, isDropdown,isCa
       <Icon className="w-4 h-4 mr-2" />
       <span>{label}</span>
     </div>
-    {(isDropdown || isCatalogOpen) && (
+    {isDropdown && (
       <span className="ml-2">{active ? <ChevronUp size={14} /> : <ChevronDown size={14} />}</span>
     )}
   </div>
 );
 
 const StudioSidebar = () => {
-  const [isBannersOpen, setIsBannersOpen] = useState(true);
+  const location = useLocation();
   const [isAIBannerOpen, setIsAIBannerOpen] = useState(false);
-  const [isCatalogOpen, setIsCatalogOpen] = useState(true);
+  const [isCatalogOpen, setIsCatalogOpen] = useState(false);
   const [showCatalogModal, setShowCatalogModal] = useState(false); // ✅ Modal state
 
-  const toggleBanners = () => setIsBannersOpen(!isBannersOpen);
-  const toggleAIBanner = () => setIsAIBannerOpen(!isAIBannerOpen);
-  const toggleCatalogs = () => setIsCatalogOpen(!isCatalogOpen);
+  // Check if current route is under AI Banners and keep it open
+  React.useEffect(() => {
+    if (location.pathname === '/custom-ads' || location.pathname === '/predefined-templates') {
+      setIsAIBannerOpen(true);
+    }
+    if (location.pathname === '/catalogs') {
+      setIsCatalogOpen(true);
+    }
+  }, [location.pathname]);
+
+  const toggleAIBanner = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsAIBannerOpen(!isAIBannerOpen);
+  };
+  
+  const toggleCatalogs = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsCatalogOpen(!isCatalogOpen);
+  };
 
   const handleCatalogSubmit = (formData) => {
     console.log("Catalog Submitted:", formData);
@@ -66,14 +81,18 @@ const StudioSidebar = () => {
         <div className="space-y-2">
           {/* Dashboard Home */}
           <Link to="/dashboard">
-            <SidebarItem icon={Home} label="Dashboard" />
+            <SidebarItem 
+              icon={Home} 
+              label="Dashboard" 
+              active={location.pathname === '/dashboard'}
+            />
           </Link>
 
           {/* AI Banner Dropdown */}
           <SidebarItem
             icon={ImageIcon}
             label="AI Banners"
-            active={isAIBannerOpen}
+            active={isAIBannerOpen || location.pathname === '/custom-ads' || location.pathname === '/predefined-templates'}
             onClick={toggleAIBanner}
             isDropdown
           />
@@ -82,12 +101,20 @@ const StudioSidebar = () => {
           {isAIBannerOpen && (
             <div className="ml-6 space-y-1">
               <Link to="/predefined-templates">
-                <div className="text-sm text-gray-700 px-3 py-1 rounded cursor-pointer hover:bg-gray-100">
+                <div className={`text-sm px-3 py-1 rounded cursor-pointer ${
+                  location.pathname === '/predefined-templates' 
+                    ? 'text-purple-700 bg-[#f1efff] hover:bg-[#e7e4ff]' 
+                    : 'text-gray-700 hover:bg-gray-100'
+                }`}>
                   Predefined Templates
                 </div>
               </Link>
               <Link to="/custom-ads">
-                <div className="text-sm text-gray-700 px-3 py-1 rounded cursor-pointer hover:bg-gray-100">
+                <div className={`text-sm px-3 py-1 rounded cursor-pointer ${
+                  location.pathname === '/custom-ads' 
+                    ? 'text-purple-700 bg-[#f1efff] hover:bg-[#e7e4ff]' 
+                    : 'text-gray-700 hover:bg-gray-100'
+                }`}>
                   Custom Generator
                 </div>
               </Link>
@@ -96,7 +123,11 @@ const StudioSidebar = () => {
 
           {/* My Media */}
           <Link to="/my-media">
-            <SidebarItem icon={Images} label="My Media" />
+            <SidebarItem 
+              icon={Images} 
+              label="My Media" 
+              active={location.pathname === '/my-media'}
+            />
           </Link>
 
           {/* Catalogs Section */}
@@ -107,9 +138,9 @@ const StudioSidebar = () => {
           <SidebarItem
             icon={FolderOpen}
             label="Catalogs"
-            active={isCatalogOpen}
+            active={isCatalogOpen || location.pathname === '/catalogs'}
             onClick={toggleCatalogs}
-            isCatalogOpen
+            isDropdown
           />
 
           {/* Catalog Dropdown */}
@@ -117,15 +148,23 @@ const StudioSidebar = () => {
             <div className="ml-6 space-y-1">
               {/* ✅ Create Catalog opens modal */}
               <div
-                className="text-sm text-purple-700 bg-[#f1efff] px-3 py-1 rounded cursor-pointer hover:bg-[#e7e4ff]"
-                onClick={() => setShowCatalogModal(true)}
+                className="text-sm text-gray-700 px-3 py-1 rounded cursor-pointer hover:bg-gray-100"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setShowCatalogModal(true);
+                }}
               >
                 Create Catalog
               </div>
 
               {/* ✅ My Catalogs links to the catalog page */}
               <Link to="/catalogs">
-                <div className="text-sm text-gray-700 px-3 py-1 rounded cursor-pointer hover:bg-gray-100">
+                <div className={`text-sm px-3 py-1 rounded cursor-pointer ${
+                  location.pathname === '/catalogs' 
+                    ? 'text-purple-700 bg-[#f1efff] hover:bg-[#e7e4ff]' 
+                    : 'text-gray-700 hover:bg-gray-100'
+                }`}>
                   My Catalogs
                 </div>
               </Link>
@@ -160,44 +199,8 @@ const StudioSidebar = () => {
           </Link>
 
 
-          {/* Create Tools Section */}
-          {/* <div className="text-xs text-gray-500 uppercase tracking-wide px-3 py-2 font-semibold">
-            Create Tools
-          </div> */}
+         
 
-          {/* <Link to="/create">
-            <SidebarItem icon={Plus} label="Create" />
-          </Link> */}
-
-          {/* Dropdown parent
-          <SidebarItem
-            icon={ImageIcon}
-            label="AI Banners"
-            active={isBannersOpen}
-            onClick={toggleBanners}
-            isDropdown
-          /> */}
-
-          {/* Dropdown links */}
-          {/* {isBannersOpen && (
-            <div className="ml-6 space-y-1">
-              <Link to="/product-ecom-ads">
-                <div className="text-sm text-purple-700 bg-[#f1efff] px-3 py-1 rounded cursor-pointer hover:bg-[#e7e4ff]">
-                  Product/Ecom Ads
-                </div>
-              </Link>
-              <Link to="/social-ads">
-                <div className="text-sm text-gray-700 px-3 py-1 rounded cursor-pointer hover:bg-gray-100">
-                  Social Ads
-                </div>
-              </Link>
-              <Link to="/custom-ads">
-                <div className="text-sm text-gray-700 px-3 py-1 rounded cursor-pointer hover:bg-gray-100">
-                  Custom Ads
-                </div>
-              </Link>
-            </div>
-          )} */}
 
 
         </div>

@@ -1,14 +1,101 @@
 import React, { useState } from 'react';
 import StudioLayout from '../layouts/StudioLayout';
-import { Search, Mic, Plus } from 'lucide-react';
+import { Mic, Plus, Wand2, Upload, Loader2, X, Download } from 'lucide-react';
+import { generateImage } from '../services/imageGenerationService';
+import LoadingSpinner from '../components/LoadingSpinner';
+import { useAuth } from '../contexts/AuthContext';
 
 const CustomAds = () => {
+  const { user } = useAuth();
   const [prompt, setPrompt] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generatedImage, setGeneratedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [error, setError] = useState('');
+  const [showImageModal, setShowImageModal] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission
-    console.log('Generating custom design with prompt:', prompt);
+    if (!prompt.trim()) {
+      setError('Please enter a prompt to generate an image');
+      return;
+    }
+
+    setIsGenerating(true);
+    setError('');
+    setGeneratedImage(null);
+
+    try {
+      const result = await generateImage(prompt, selectedImage);
+      setGeneratedImage(result);
+      setShowImageModal(true); // Show modal when image is generated
+    } catch (error) {
+      console.error('Error generating image:', error);
+      setError('Failed to generate image. Please try again.');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedImage(file);
+    }
+  };
+
+  const clearSelectedImage = () => {
+    setSelectedImage(null);
+  };
+
+  const handleDownload = async () => {
+    try {
+      const imageUrl = generatedImage.url || generatedImage.image_url;
+      
+      const response = await fetch(imageUrl, {
+        mode: 'cors',
+        headers: {
+          'Origin': window.location.origin
+        }
+      });
+      
+      if (!response.ok) throw new Error('Failed to fetch image');
+      
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      
+      const link = document.createElement('a');
+      link.style.display = 'none';
+      link.href = url;
+      link.download = `snapsell-generated-${Date.now()}.png`;
+      link.setAttribute('download', `snapsell-generated-${Date.now()}.png`);
+      
+      document.body.appendChild(link);
+      link.click();
+      
+      setTimeout(() => {
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      }, 100);
+      
+    } catch (error) {
+      console.error('Download failed:', error);
+      
+      const link = document.createElement('a');
+      link.href = generatedImage.url || generatedImage.image_url;
+      link.download = `snapsell-generated-${Date.now()}.png`;
+      link.setAttribute('download', `snapsell-generated-${Date.now()}.png`);
+      link.style.display = 'none';
+      
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
+
+  const closeModal = () => {
+    setShowImageModal(false);
+    setGeneratedImage(null);
   };
 
   return (
@@ -20,7 +107,9 @@ const CustomAds = () => {
           {/* Greeting */}
           <div className="space-y-4">
             <h1 className="text-4xl md:text-5xl font-normal text-gray-700">
-              Hello, <span className="bg-gradient-to-r from-[#6a4bff] to-[#f82cff] bg-clip-text text-transparent font-medium">Hiren</span>
+              Hello, <span className="bg-gradient-to-r from-[#6a4bff] to-[#f82cff] bg-clip-text text-transparent font-medium">
+                {user?.name || user?.email?.split('@')[0] || 'User'}
+              </span>
             </h1>
           </div>
 
@@ -29,13 +118,16 @@ const CustomAds = () => {
             <form onSubmit={handleSubmit} className="relative">
               <div className="relative flex items-center bg-white border border-gray-200 rounded-full shadow-lg hover:shadow-xl transition-shadow duration-300 p-4">
                 
-                {/* Plus Icon */}
-                <button
-                  type="button"
-                  className="flex-shrink-0 p-2 text-gray-400 hover:text-gray-600 transition-colors"
-                >
-                  <Plus className="w-5 h-5" />
-                </button>
+                {/* Upload Icon */}
+                <label className="flex-shrink-0 p-2 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer">
+                  <Upload className="w-5 h-5" />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                  />
+                </label>
 
                 {/* Input Field */}
                 <input
@@ -48,22 +140,20 @@ const CustomAds = () => {
 
                 {/* Right Side Icons */}
                 <div className="flex items-center space-x-2">
-                  {/* Deep Research Button */}
+                  {/* Generate Button */}
                   <button
-                    type="button"
-                    className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+                    type="submit"
+                    disabled={isGenerating || !prompt.trim()}
+                    className="flex items-center space-x-2 px-6 py-2 bg-gradient-to-r from-[#6a4bff] to-[#f82cff] text-white rounded-full hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <Search className="w-4 h-4" />
-                    <span className="text-sm font-medium">Deep Research</span>
-                  </button>
-
-                  {/* Canvas Button */}
-                  <button
-                    type="button"
-                    className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
-                  >
-                    <div className="w-4 h-4 border border-gray-400 rounded"></div>
-                    <span className="text-sm font-medium">Canvas</span>
+                    {isGenerating ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Wand2 className="w-4 h-4" />
+                    )}
+                    <span className="text-sm font-medium">
+                      {isGenerating ? 'Generating...' : 'Generate'}
+                    </span>
                   </button>
 
                   {/* Mic Button */}
@@ -77,13 +167,39 @@ const CustomAds = () => {
               </div>
             </form>
 
+            {/* Selected Image Preview */}
+            {selectedImage && (
+              <div className="mt-4 flex items-center justify-center">
+                <div className="relative">
+                  <img
+                    src={URL.createObjectURL(selectedImage)}
+                    alt="Selected"
+                    className="h-20 w-20 object-cover rounded-lg border border-gray-200"
+                  />
+                  <button
+                    onClick={clearSelectedImage}
+                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
+                  >
+                    ×
+                  </button>
+                </div>
+                <span className="ml-3 text-sm text-gray-600">{selectedImage.name}</span>
+              </div>
+            )}
+
+            {/* Error Message */}
+            {error && (
+              <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm text-center">
+                {error}
+              </div>
+            )}
+
             {/* Suggestions */}
             <div className="mt-8 flex flex-wrap justify-center gap-3">
               {[
-                "Create a social media post",
-                "Design a product banner",
-                "Make a logo design",
-                "Generate an ad creative"
+                "Professional product photography on white background",
+                "Vibrant social media banner with gradient colors",
+                "Minimalist logo design with geometric shapes",
               ].map((suggestion, index) => (
                 <button
                   key={index}
@@ -96,32 +212,89 @@ const CustomAds = () => {
             </div>
           </div>
 
+          {/* Loading State */}
+          {isGenerating && (
+            <div className="w-full max-w-4xl mx-auto mt-12">
+              <div className="bg-white rounded-2xl shadow-xl p-12 text-center">
+                <LoadingSpinner />
+                <p className="mt-4 text-gray-600">Creating your amazing design...</p>
+                <p className="mt-2 text-sm text-gray-500">This may take a few moments</p>
+              </div>
+            </div>
+          )}
+
+          {/* Generated Image Modal */}
+          {showImageModal && generatedImage && (
+            <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+              <div className="bg-white rounded-2xl max-w-4xl max-h-[90vh] overflow-hidden relative">
+                {/* Modal Header */}
+                <div className="flex justify-between items-center p-6 border-b border-gray-200">
+                  <h2 className="text-2xl font-semibold text-gray-800">Generated Image</h2>
+                  <button
+                    onClick={closeModal}
+                    className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                  >
+                    <X className="w-6 h-6 text-gray-600" />
+                  </button>
+                </div>
+                
+                {/* Modal Body */}
+                <div className="p-6">
+                  <img
+                    src={generatedImage.url || generatedImage.image_url}
+                    alt="Generated"
+                    className="w-full max-w-3xl mx-auto rounded-lg shadow-lg"
+                  />
+                </div>
+                
+                {/* Modal Footer */}
+                <div className="flex justify-center space-x-4 p-6 border-t border-gray-200">
+                  <button
+                    onClick={handleDownload}
+                    className="flex items-center space-x-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    <Download className="w-5 h-5" />
+                    <span>Download</span>
+                  </button>
+                  <button
+                    onClick={closeModal}
+                    className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Features Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
-            <div className="text-center p-6">
-              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <div className="w-6 h-6 bg-purple-600 rounded"></div>
+          {!generatedImage && !isGenerating && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
+              <div className="text-center p-6">
+                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <Wand2 className="w-6 h-6 text-purple-600" />
+                </div>
+                <h3 className="font-semibold text-gray-800 mb-2">AI Image Generation</h3>
+                <p className="text-gray-600 text-sm">Create stunning images from text descriptions using advanced AI</p>
               </div>
-              <h3 className="font-semibold text-gray-800 mb-2">AI-Powered Design</h3>
-              <p className="text-gray-600 text-sm">Create stunning designs with advanced AI technology</p>
-            </div>
-            
-            <div className="text-center p-6">
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <div className="w-6 h-6 bg-blue-600 rounded"></div>
+              
+              <div className="text-center p-6">
+                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <Upload className="w-6 h-6 text-blue-600" />
+                </div>
+                <h3 className="font-semibold text-gray-800 mb-2">Image-to-Image</h3>
+                <p className="text-gray-600 text-sm">Upload an image and transform it based on your prompt</p>
               </div>
-              <h3 className="font-semibold text-gray-800 mb-2">Custom Templates</h3>
-              <p className="text-gray-600 text-sm">Access thousands of customizable design templates</p>
-            </div>
-            
-            <div className="text-center p-6">
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <div className="w-6 h-6 bg-green-600 rounded"></div>
+              
+              <div className="text-center p-6">
+                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                  <div className="w-6 h-6 bg-green-600 rounded"></div>
+                </div>
+                <h3 className="font-semibold text-gray-800 mb-2">High Quality Output</h3>
+                <p className="text-gray-600 text-sm">Generate high-resolution images perfect for any use case</p>
               </div>
-              <h3 className="font-semibold text-gray-800 mb-2">One-Click Export</h3>
-              <p className="text-gray-600 text-sm">Export your designs in multiple formats instantly</p>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </StudioLayout>

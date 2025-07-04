@@ -42,8 +42,13 @@ const StudioNavbar = () => {
     <nav className="h-16 bg-white border-b border-gray-200 px-6 flex items-center justify-between fixed top-0 left-0 right-0 z-30">
       {/* Left Side: Logo */}
       <div className="flex items-center">
-        <div className="text-2xl font-extrabold text-gray-800">
-          Snapsell.<span className="text-purple-700">AI</span>
+        <div className="text-2xl font-extrabold">
+          <span className="bg-gradient-to-r from-[#6a4bff] to-[#f82cff] bg-clip-text text-transparent">
+            Snapsell.
+          </span>
+          <span className="text-black">
+            AI
+          </span>
         </div>
       </div>
 
