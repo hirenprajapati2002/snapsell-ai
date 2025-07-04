@@ -78,7 +78,7 @@ const StudioSidebar = () => {
   };
 
   return (
-    <aside className="w-60 bg-white border-r px-4 py-6 h-full flex flex-col justify-between fixed top-16 left-0 z-20 ">
+    <aside className="w-[225px] bg-white border-r px-4 py-6 h-full flex flex-col justify-between fixed top-16 left-0 z-20">
       <div>
         {/* Logo */}
         {/* <div className="mb-8 flex items-center text-2xl font-extrabold text-gray-800">
@@ -178,21 +178,6 @@ const StudioSidebar = () => {
           {/* Campaigns */}
           <Link to="/campaigns">
             <SidebarItem icon={Megaphone} label="Campaigns" />
-          </Link>
-
-          {/* Shared Content */}
-          <Link to="/shared-content">
-            <SidebarItem icon={Share2} label="Shared Content" />
-          </Link>
-
-          {/* Local Events */}
-          <Link to="/local-events">
-            <SidebarItem icon={Calendar} label="Local Events (Sync)" />
-          </Link>
-
-          {/* Insights */}
-          <Link to="/insights">
-            <SidebarItem icon={TrendingUp} label="Insights" />
           </Link>
 
         </div>

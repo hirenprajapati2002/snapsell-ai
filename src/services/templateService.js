@@ -5,7 +5,7 @@ const templateService = {
   // Fetch all templates from API
   async getTemplates() {
     try {
-      const response = await apiClient.get('/templates');
+      const response = await apiClient.get('/photoroom/templates');
       return {
         success: true,
         data: response.data
@@ -22,7 +22,7 @@ const templateService = {
   // Update template with new image and text
   async updateTemplate(templateId, updateData) {
     try {
-      const response = await apiClient.post(`/templates/${templateId}`, updateData);
+      const response = await apiClient.post(`/photoroom/templates/${templateId}`, updateData);
       return {
         success: true,
         data: response.data
@@ -39,7 +39,7 @@ const templateService = {
   // Get template details by ID
   async getTemplateById(templateId) {
     try {
-      const response = await apiClient.get(`/templates/${templateId}`);
+      const response = await apiClient.get(`/photoroom/templates/${templateId}`);
       return {
         success: true,
         data: response.data

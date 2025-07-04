@@ -10,3 +10,13 @@ export const generateCampaign = async (form) => {
   });
   return response.data;
 };
+
+export const getCampaigns = async () => {
+  const response = await apiClient.get('/marketing-campaigns');
+  return response.data.campaigns || [];
+};
+
+export const getCampaignById = async (id) => {
+  const response = await apiClient.get(`/marketing-campaigns/${id}`);
+  return response.data.campaign;
+};
