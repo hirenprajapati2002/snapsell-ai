@@ -1,20 +1,77 @@
 // src/pages/PredefinedTemplatesPage.jsx
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, Grid, List, Eye, Edit3, Star, Calendar, Tag } from 'lucide-react';
+import { Search, Filter, Grid, List, Eye, Edit3, Star, Calendar, Tag, Loader } from 'lucide-react';
 import StudioLayout from '../layouts/StudioLayout';
 import TemplateDetailModal from '../components/templates/TemplateDetailModal';
 import TemplateEditModal from '../components/templates/TemplateEditModal';
-import { festivalTemplatesData } from '../data/festivalTemplatesData';
+import templateService from '../services/templateService';
 
 const PredefinedTemplatesPage = () => {
-  const [templates, setTemplates] = useState(festivalTemplatesData);
-  const [filteredTemplates, setFilteredTemplates] = useState(festivalTemplatesData);
+  const [templates, setTemplates] = useState([]);
+  const [filteredTemplates, setFilteredTemplates] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  // Fetch templates from API
+  useEffect(() => {
+    const fetchTemplates = async () => {
+      setLoading(true);
+      setError('');
+      
+      try {
+        const result = await templateService.getTemplates();
+        
+        if (result.success && result.data && result.data.data) {
+          // Transform API response to template objects
+          const transformedTemplates = result.data.data.map((template, index) => {
+            // Extract template ID from URL path for fallback
+            const urlParts = template.url.split('/');
+            const pathWithId = urlParts.find(part => part.includes('%2F'));
+            let extractedId = '';
+            
+            if (pathWithId) {
+              const decodedPath = decodeURIComponent(pathWithId);
+              const idMatch = decodedPath.match(/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/);
+              extractedId = idMatch ? idMatch[0] : template.id.toString();
+            } else {
+              extractedId = template.id.toString();
+            }
+
+            return {
+              id: extractedId,
+              name: template.name,
+              imageUrl: template.url,
+              text: `${template.name} content text`,
+              category: template.category,
+              type: 'promotional',
+              description: `This is ${template.name.toLowerCase()} for ${template.category} campaigns`,
+              tags: [template.category, 'promotion', 'design'],
+              isTrending: index < 2,
+              updatedAt: new Date().toISOString()
+            };
+          });
+          
+          setTemplates(transformedTemplates);
+          setFilteredTemplates(transformedTemplates);
+        } else {
+          setError(result.error || 'Failed to fetch templates');
+        }
+      } catch (error) {
+        console.error('Error fetching templates:', error);
+        setError('Failed to fetch templates. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTemplates();
+  }, []);
 
   // Filter templates based on search and category
   useEffect(() => {
@@ -37,7 +94,7 @@ const PredefinedTemplatesPage = () => {
     setFilteredTemplates(filtered);
   }, [searchTerm, selectedCategory, templates]);
 
-  // Get unique categories
+  // Get unique categories from templates
   const categories = ['all', ...new Set(templates.map(template => template.category))];
 
   const handleShowTemplate = (template) => {
@@ -139,16 +196,26 @@ const PredefinedTemplatesPage = () => {
           <div className="flex flex-col md:flex-row gap-6">
             {/* Thumbnail */}
             <div className="flex-shrink-0">
-              <div className={`w-full md:w-48 h-32 ${templateStyle.bgImage} rounded-lg overflow-hidden relative shadow-lg`}>
-                <div className={`w-full h-full flex flex-col items-center justify-center ${templateStyle.textColor} font-bold relative`}>
-                  <div className="text-3xl mb-2">{templateStyle.pattern}</div>
-                  <div className="text-lg font-bold text-center px-2">{name}</div>
-                  {promotionalText?.discount && (
-                    <div className="absolute bottom-2 right-2 bg-white/90 backdrop-blur-sm text-gray-900 px-2 py-1 rounded-full text-xs font-bold">
-                      {promotionalText.discount}
-                    </div>
-                  )}
-                </div>
+              <div className="w-full md:w-48 h-32 rounded-lg overflow-hidden relative shadow-lg bg-white border border-gray-100">
+                {template.imageUrl ? (
+                  <img
+                    src={template.imageUrl}
+                    alt={name}
+                    className="w-full h-full object-contain p-2"
+                  />
+                ) : (
+                  <div className={`w-full h-full flex flex-col items-center justify-center ${templateStyle.textColor} font-bold relative ${templateStyle.bgImage}`}>
+                    <div className="text-3xl mb-2">{templateStyle.pattern}</div>
+                    <div className="text-lg font-bold text-center px-2">{name}</div>
+                  </div>
+                )}
+                
+                {promotionalText?.discount && (
+                  <div className="absolute bottom-2 right-2 bg-white/90 backdrop-blur-sm text-gray-900 px-2 py-1 rounded-full text-xs font-bold">
+                    {promotionalText.discount}
+                  </div>
+                )}
+                
                 {isTrending && (
                   <div className="absolute top-2 left-2 bg-orange-500 text-white px-2 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
                     <Star className="w-3 h-3" />
@@ -217,16 +284,25 @@ const PredefinedTemplatesPage = () => {
     return (
       <div className="bg-white rounded-lg border border-gray-200 hover:border-purple-300 transition-all duration-300 overflow-hidden group">
         {/* Image Container */}
-        <div className={`relative h-48 ${templateStyle.bgImage} overflow-hidden shadow-lg`}>
-          <div className={`w-full h-full flex flex-col items-center justify-center ${templateStyle.textColor} font-bold relative`}>
-            <div className="text-4xl mb-2">{templateStyle.pattern}</div>
-            <div className="text-lg font-bold text-center px-2">{name}</div>
-            {promotionalText?.discount && (
-              <div className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm text-gray-900 px-2 py-1 rounded-full text-xs font-bold">
-                {promotionalText.discount}
-              </div>
-            )}
-          </div>
+        <div className="relative h-48 overflow-hidden shadow-lg bg-white border border-gray-100">
+          {template.imageUrl ? (
+            <img
+              src={template.imageUrl}
+              alt={name}
+              className="w-full h-full object-contain p-2"
+            />
+          ) : (
+            <div className={`w-full h-full flex flex-col items-center justify-center ${templateStyle.textColor} font-bold relative ${templateStyle.bgImage}`}>
+              <div className="text-4xl mb-2">{templateStyle.pattern}</div>
+              <div className="text-lg font-bold text-center px-2">{name}</div>
+            </div>
+          )}
+          
+          {promotionalText?.discount && (
+            <div className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-sm text-gray-900 px-2 py-1 rounded-full text-xs font-bold">
+              {promotionalText.discount}
+            </div>
+          )}
           
           {/* Trending Badge */}
           {isTrending && (
@@ -357,23 +433,48 @@ const PredefinedTemplatesPage = () => {
           </div>
         </div>
 
+        {/* Loading State */}
+        {loading && (
+          <div className="flex flex-col items-center justify-center py-12">
+            <Loader className="w-12 h-12 text-purple-600 animate-spin mb-4" />
+            <p className="text-gray-600">Loading templates...</p>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && !loading && (
+          <div className="flex flex-col items-center justify-center py-12">
+            <div className="bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded-lg mb-4">
+              {error}
+            </div>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
+            >
+              Try Again
+            </button>
+          </div>
+        )}
+
         {/* Templates Grid/List */}
-        <div className={
-          viewMode === 'grid' 
-            ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-            : "space-y-4"
-        }>
-          {filteredTemplates.map(template => (
-            <TemplateCard
-              key={template.id}
-              template={template}
-              viewMode={viewMode}
-            />
-          ))}
-        </div>
+        {!loading && !error && (
+          <div className={
+            viewMode === 'grid' 
+              ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              : "space-y-4"
+          }>
+            {filteredTemplates.map(template => (
+              <TemplateCard
+                key={template.id}
+                template={template}
+                viewMode={viewMode}
+              />
+            ))}
+          </div>
+        )}
 
         {/* No Results */}
-        {filteredTemplates.length === 0 && (
+        {!loading && !error && filteredTemplates.length === 0 && templates.length > 0 && (
           <div className="text-center py-12">
             <div className="text-gray-500 text-lg mb-2">No templates found</div>
             <p className="text-gray-400">Try adjusting your search or filter criteria</p>
@@ -385,7 +486,8 @@ const PredefinedTemplatesPage = () => {
           <TemplateDetailModal
             template={selectedTemplate}
             onClose={handleCloseModals}
-            onEdit={() => {
+            onEdit={(template) => {
+              setSelectedTemplate(template);
               setShowDetailModal(false);
               setShowEditModal(true);
             }}

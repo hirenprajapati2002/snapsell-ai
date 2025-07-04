@@ -25,6 +25,9 @@ const TemplateDetailModal = ({ template, onClose, onEdit }) => {
           <div className="mb-6">
             <div className="bg-gray-50 rounded-lg p-4">
               <p className="text-sm text-gray-600 mb-2">
+                <span className="font-medium">Template ID:</span> {template.id}
+              </p>
+              <p className="text-sm text-gray-600 mb-2">
                 <span className="font-medium">Name:</span> {template.name || 'Template'}
               </p>
               <p className="text-sm text-gray-600">
@@ -36,12 +39,12 @@ const TemplateDetailModal = ({ template, onClose, onEdit }) => {
           {/* Template Image */}
           <div className="mb-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-3">Template Preview</h3>
-            <div className="w-full h-64 bg-white border border-gray-200 rounded-lg overflow-hidden flex items-center justify-center">
+            <div className="w-full h-64 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
               {template.imageUrl ? (
                 <img
                   src={template.imageUrl}
                   alt="Template preview"
-                  className="w-full h-full object-contain p-4"
+                  className="w-full h-full object-cover"
                 />
               ) : (
                 <div className="text-gray-400 text-center">
@@ -61,7 +64,7 @@ const TemplateDetailModal = ({ template, onClose, onEdit }) => {
             </button>
             <button
               onClick={() => {
-                onEdit(template);
+                onEdit();
                 onClose();
               }}
               className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"

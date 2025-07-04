@@ -52,44 +52,52 @@ const CustomAds = () => {
     try {
       const imageUrl = generatedImage.url || generatedImage.image_url;
       
-      const response = await fetch(imageUrl, {
-        mode: 'cors',
-        headers: {
-          'Origin': window.location.origin
+      // Create a temporary link element
+      const link = document.createElement('a');
+      link.style.display = 'none';
+      
+      // Try to fetch the image as blob first (better for cross-origin)
+      try {
+        const response = await fetch(imageUrl, {
+          method: 'GET',
+          mode: 'cors',
+        });
+        
+        if (response.ok) {
+          const blob = await response.blob();
+          const blobUrl = window.URL.createObjectURL(blob);
+          
+          link.href = blobUrl;
+          link.download = `snapsell-generated-${Date.now()}.png`;
+          
+          document.body.appendChild(link);
+          link.click();
+          
+          // Clean up
+          setTimeout(() => {
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(blobUrl);
+          }, 100);
+          
+          return;
         }
-      });
+      } catch (fetchError) {
+        console.log('Fetch failed, trying direct download:', fetchError);
+      }
       
-      if (!response.ok) throw new Error('Failed to fetch image');
-      
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      
-      const link = document.createElement('a');
-      link.style.display = 'none';
-      link.href = url;
+      // Fallback: Direct download link
+      link.href = imageUrl;
       link.download = `snapsell-generated-${Date.now()}.png`;
-      link.setAttribute('download', `snapsell-generated-${Date.now()}.png`);
-      
-      document.body.appendChild(link);
-      link.click();
-      
-      setTimeout(() => {
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
-      }, 100);
-      
-    } catch (error) {
-      console.error('Download failed:', error);
-      
-      const link = document.createElement('a');
-      link.href = generatedImage.url || generatedImage.image_url;
-      link.download = `snapsell-generated-${Date.now()}.png`;
-      link.setAttribute('download', `snapsell-generated-${Date.now()}.png`);
-      link.style.display = 'none';
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
       
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      
+    } catch (error) {
+      console.error('Download failed:', error);
+      alert('Download failed. Please try right-clicking the image and selecting "Save image as..."');
     }
   };
 
@@ -193,23 +201,6 @@ const CustomAds = () => {
                 {error}
               </div>
             )}
-
-            {/* Suggestions */}
-            <div className="mt-8 flex flex-wrap justify-center gap-3">
-              {[
-                "Professional product photography on white background",
-                "Vibrant social media banner with gradient colors",
-                "Minimalist logo design with geometric shapes",
-              ].map((suggestion, index) => (
-                <button
-                  key={index}
-                  onClick={() => setPrompt(suggestion)}
-                  className="px-4 py-2 text-sm text-gray-600 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors"
-                >
-                  {suggestion}
-                </button>
-              ))}
-            </div>
           </div>
 
           {/* Loading State */}
@@ -226,9 +217,9 @@ const CustomAds = () => {
           {/* Generated Image Modal */}
           {showImageModal && generatedImage && (
             <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
-              <div className="bg-white rounded-2xl max-w-4xl max-h-[90vh] overflow-hidden relative">
+              <div className="bg-white rounded-2xl w-[800px] h-[700px] flex flex-col relative">
                 {/* Modal Header */}
-                <div className="flex justify-between items-center p-6 border-b border-gray-200">
+                <div className="flex justify-between items-center p-6 border-b border-gray-200 flex-shrink-0">
                   <h2 className="text-2xl font-semibold text-gray-800">Generated Image</h2>
                   <button
                     onClick={closeModal}
@@ -239,16 +230,16 @@ const CustomAds = () => {
                 </div>
                 
                 {/* Modal Body */}
-                <div className="p-6">
+                <div className="flex-1 p-6 flex items-center justify-center overflow-hidden">
                   <img
                     src={generatedImage.url || generatedImage.image_url}
                     alt="Generated"
-                    className="w-full max-w-3xl mx-auto rounded-lg shadow-lg"
+                    className="max-w-full max-h-full object-contain rounded-lg shadow-lg"
                   />
                 </div>
                 
                 {/* Modal Footer */}
-                <div className="flex justify-center space-x-4 p-6 border-t border-gray-200">
+                <div className="flex justify-center space-x-4 p-6 border-t border-gray-200 flex-shrink-0">
                   <button
                     onClick={handleDownload}
                     className="flex items-center space-x-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"

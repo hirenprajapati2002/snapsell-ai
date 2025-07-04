@@ -138,7 +138,7 @@ const StudioSidebar = () => {
           <SidebarItem
             icon={FolderOpen}
             label="Catalogs"
-            active={isCatalogOpen || location.pathname === '/catalogs'}
+            active={isCatalogOpen || location.pathname === '/catalogs' || showCatalogModal}
             onClick={toggleCatalogs}
             isDropdown
           />
