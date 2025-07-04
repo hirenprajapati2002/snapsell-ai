@@ -65,7 +65,7 @@ export const AuthProvider = ({ children }) => {
 
                 // Show welcome message and redirect to create page
                 setTimeout(() => {
-                    window.location.href = '/create';
+                    window.location.href = '/dashboard';
                 }, 500);
 
                 return { success: true };
@@ -88,7 +88,8 @@ export const AuthProvider = ({ children }) => {
 
                 // Show welcome tooltip and redirect to create page
                 setTimeout(() => {
-                    window.location.href = '/create';
+                    alert("Welcome! Let's create your first product poster!");
+                    window.location.href = '/dashboard';
                 }, 500);
 
                 return { success: true };
