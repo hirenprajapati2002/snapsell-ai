@@ -106,7 +106,7 @@ const ToolsSection = () => {
                     </div>
                 </div>
                 {/* Marketplace Support Section */}
-                <div className="mt-16 text-center">
+                <div className="py-16 text-center">
                     <h3 className="text-2xl font-semibold text-black mb-2">Compatible With All Platforms</h3>
                     <p className="text-gray-600 text-lg mb-6">
                         Use your enhanced visuals on all <span className="font-semibold">marketplaces, platforms</span>, and social channels

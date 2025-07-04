@@ -32,10 +32,10 @@ const Footer = () => {
                         <div className="mb-6 flex items-center">
                             <div className="flex items-center space-x-2">
                                 <div className="bg-[#7B3FF7] text-white h-10 w-10 rounded-lg flex items-center justify-center font-bold text-xl">
-                                    P
+                                    S
                                 </div>
                                 <h2 className="text-2xl font-bold text-white">
-                                    Phot.<span className="text-[#7B3FF7]">AI</span>
+                                    Snapsell.<span className="text-[#7B3FF7]">AI</span>
                                 </h2>
                             </div>
                         </div>
@@ -60,7 +60,7 @@ const Footer = () => {
 
                     {/* Navigation columns */}
                     <div>
-                        <h3 className="text-lg font-semibold text-white mb-4">Phot.AI</h3>
+                        <h3 className="text-lg font-semibold text-white mb-4">Snapsell.AI</h3>
                         <ul className="space-y-3">
                             <li><Link to="/" className="text-gray-400 hover:text-white transition-colors">Home</Link></li>
                             <li><Link to="/all-tools" className="text-gray-400 hover:text-white transition-colors">All Tools</Link></li>
@@ -98,7 +98,7 @@ const Footer = () => {
 
                 {/* Marketplace logos */}
                 <div className="border-t border-[#333] pt-8 mt-8">
-                    <p className="text-gray-400 mb-5 text-center">Contact us at <a href="mailto:support@phot.ai" className="text-[#7B3FF7] hover:text-[#9B6DFF]">support@phot.ai</a></p>
+                    <p className="text-gray-400 mb-5 text-center">Contact us at <a href="mailto:support@phot.ai" className="text-[#7B3FF7] hover:text-[#9B6DFF]">support@snapsell.ai</a></p>
                     <div className="flex flex-wrap justify-center items-center gap-4 md:gap-6">
                         <div className="w-10 h-10 bg-[#1A1A1A] rounded-full p-2 hover:bg-[#252525] transition-colors">
                             <img src={FacebookIcon} alt="Facebook" className="w-full h-full object-contain" />
@@ -131,7 +131,7 @@ const Footer = () => {
                 <div className="border-t border-[#333] mt-8 pt-8">
                     <div className="flex flex-col md:flex-row justify-between items-center">
                         <p className="text-gray-400 text-sm">
-                            © {currentYear} Phot.AI, All rights reserved.
+                            © {currentYear} Snapsell.AI, All rights reserved.
                         </p>
                         <div className="flex flex-wrap gap-4 mt-4 md:mt-0">
                             <Link to="/legal/privacy-policy" className="text-gray-400 text-sm hover:text-white transition-colors">

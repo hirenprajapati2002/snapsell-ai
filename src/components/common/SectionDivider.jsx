@@ -2,9 +2,9 @@
 import React from "react";
 import curveDivider from "../../assets/Herobottom.svg";
 
-const SectionDivider = () => {
+const SectionDivider = ({color}) => {
   return (
-    <div className="overflow-hidden">
+    <div className={`overflow-hidden ${color}`}>
       <img
         src={curveDivider}
         alt="Section Divider"
