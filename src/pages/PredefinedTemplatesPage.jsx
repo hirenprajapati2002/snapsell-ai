@@ -120,9 +120,14 @@ const PredefinedTemplatesPage = () => {
 
   const handleCloseModals = () => {
     setShowDetailModal(false);
-    setShowEditModal(false);
-    setSelectedTemplate(null);
+    // setSelectedTemplate(null);
   };
+
+  const handleEditCloseModals=()=>{
+     setShowDetailModal(false);
+      setSelectedTemplate(null);
+       setShowEditModal(false);
+  }
 
   const TemplateCard = ({ template, viewMode = 'grid' }) => {
     const {
@@ -500,7 +505,7 @@ const PredefinedTemplatesPage = () => {
         {showEditModal && (
           <TemplateEditModal
             template={selectedTemplate}
-            onClose={handleCloseModals}
+            onClose={handleEditCloseModals}
             onSave={handleSaveTemplate}
           />
         )}

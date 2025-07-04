@@ -8,11 +8,11 @@ import usePrivateRoutes from '../hooks/usePrivateRoutes';
 
 const CustomAds = () => {
   const { user } = useAuth();
-  const [prompt, setPrompt] = useState('');
+  const [prompt, setPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [showImageModal, setShowImageModal] = useState(false);
 
   usePrivateRoutes(); // Protected route
@@ -20,12 +20,12 @@ const CustomAds = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) {
-      setError('Please enter a prompt to generate an image');
+      setError("Please enter a prompt to generate an image");
       return;
     }
 
     setIsGenerating(true);
-    setError('');
+    setError("");
     setGeneratedImage(null);
 
     try {
@@ -33,8 +33,8 @@ const CustomAds = () => {
       setGeneratedImage(result);
       setShowImageModal(true); // Show modal when image is generated
     } catch (error) {
-      console.error('Error generating image:', error);
-      setError('Failed to generate image. Please try again.');
+      console.error("Error generating image:", error);
+      setError("Failed to generate image. Please try again.");
     } finally {
       setIsGenerating(false);
     }
@@ -54,53 +54,54 @@ const CustomAds = () => {
   const handleDownload = async () => {
     try {
       const imageUrl = generatedImage.url || generatedImage.image_url;
-      
+
       // Create a temporary link element
-      const link = document.createElement('a');
-      link.style.display = 'none';
-      
+      const link = document.createElement("a");
+      link.style.display = "none";
+
       // Try to fetch the image as blob first (better for cross-origin)
       try {
         const response = await fetch(imageUrl, {
-          method: 'GET',
-          mode: 'cors',
+          method: "GET",
+          mode: "cors",
         });
-        
+
         if (response.ok) {
           const blob = await response.blob();
           const blobUrl = window.URL.createObjectURL(blob);
-          
+
           link.href = blobUrl;
           link.download = `snapsell-generated-${Date.now()}.png`;
-          
+
           document.body.appendChild(link);
           link.click();
-          
+
           // Clean up
           setTimeout(() => {
             document.body.removeChild(link);
             window.URL.revokeObjectURL(blobUrl);
           }, 100);
-          
+
           return;
         }
       } catch (fetchError) {
-        console.log('Fetch failed, trying direct download:', fetchError);
+        console.log("Fetch failed, trying direct download:", fetchError);
       }
-      
+
       // Fallback: Direct download link
       link.href = imageUrl;
       link.download = `snapsell-generated-${Date.now()}.png`;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      
     } catch (error) {
-      console.error('Download failed:', error);
-      alert('Download failed. Please try right-clicking the image and selecting "Save image as..."');
+      console.error("Download failed:", error);
+      alert(
+        'Download failed. Please try right-clicking the image and selecting "Save image as..."'
+      );
     }
   };
 
@@ -114,12 +115,12 @@ const CustomAds = () => {
       <div className="min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center px-4 bg-gradient-to-br from-gray-50 to-white">
         {/* Main Content Container */}
         <div className="w-full max-w-4xl text-center space-y-12">
-          
           {/* Greeting */}
           <div className="space-y-4">
             <h1 className="text-4xl md:text-5xl font-normal text-gray-700">
-              Hello, <span className="bg-gradient-to-r from-[#6a4bff] to-[#f82cff] bg-clip-text text-transparent font-medium">
-                {user?.name || user?.email?.split('@')[0] || 'User'}
+              Hello,{" "}
+              <span className="bg-gradient-to-r from-[#6a4bff] to-[#f82cff] bg-clip-text text-transparent font-medium">
+                {user?.name || user?.email?.split("@")[0] || "User"}
               </span>
             </h1>
           </div>
@@ -128,7 +129,6 @@ const CustomAds = () => {
           <div className="w-full max-w-2xl mx-auto">
             <form onSubmit={handleSubmit} className="relative">
               <div className="relative flex items-center bg-white border border-gray-200 rounded-full shadow-lg hover:shadow-xl transition-shadow duration-300 p-4">
-                
                 {/* Upload Icon */}
                 <label className="flex-shrink-0 p-2 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer">
                   <Upload className="w-5 h-5" />
@@ -163,7 +163,7 @@ const CustomAds = () => {
                       <Wand2 className="w-4 h-4" />
                     )}
                     <span className="text-sm font-medium">
-                      {isGenerating ? 'Generating...' : 'Generate'}
+                      {isGenerating ? "Generating..." : "Generate"}
                     </span>
                   </button>
 
@@ -194,7 +194,9 @@ const CustomAds = () => {
                     ×
                   </button>
                 </div>
-                <span className="ml-3 text-sm text-gray-600">{selectedImage.name}</span>
+                <span className="ml-3 text-sm text-gray-600">
+                  {selectedImage.name}
+                </span>
               </div>
             )}
 
@@ -211,8 +213,12 @@ const CustomAds = () => {
             <div className="w-full max-w-4xl mx-auto mt-12">
               <div className="bg-white rounded-2xl shadow-xl p-12 text-center">
                 <LoadingSpinner />
-                <p className="mt-4 text-gray-600">Creating your amazing design...</p>
-                <p className="mt-2 text-sm text-gray-500">This may take a few moments</p>
+                <p className="mt-4 text-gray-600">
+                  Creating your amazing design...
+                </p>
+                <p className="mt-2 text-sm text-gray-500">
+                  This may take a few moments
+                </p>
               </div>
             </div>
           )}
@@ -223,7 +229,9 @@ const CustomAds = () => {
               <div className="bg-white rounded-2xl w-[800px] h-[700px] flex flex-col relative">
                 {/* Modal Header */}
                 <div className="flex justify-between items-center p-6 border-b border-gray-200 flex-shrink-0">
-                  <h2 className="text-2xl font-semibold text-gray-800">Generated Image</h2>
+                  <h2 className="text-2xl font-semibold text-gray-800">
+                    Generated Image
+                  </h2>
                   <button
                     onClick={closeModal}
                     className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -231,7 +239,7 @@ const CustomAds = () => {
                     <X className="w-6 h-6 text-gray-600" />
                   </button>
                 </div>
-                
+
                 {/* Modal Body */}
                 <div className="flex-1 p-6 flex items-center justify-center overflow-hidden">
                   <img
@@ -240,8 +248,9 @@ const CustomAds = () => {
                     className="max-w-full max-h-full object-contain rounded-lg shadow-lg"
                   />
                 </div>
-                
+
                 {/* Modal Footer */}
+
                 <div className="flex justify-center space-x-4 p-6 border-t border-gray-200 flex-shrink-0">
                   <button
                     onClick={handleDownload}
@@ -252,9 +261,9 @@ const CustomAds = () => {
                   </button>
                   <button
                     onClick={closeModal}
-                    className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+                    className="flex items-center space-x-2 px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
                   >
-                    Close
+                    <span>Close</span>
                   </button>
                 </div>
               </div>
@@ -268,24 +277,37 @@ const CustomAds = () => {
                 <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-4">
                   <Wand2 className="w-6 h-6 text-purple-600" />
                 </div>
-                <h3 className="font-semibold text-gray-800 mb-2">AI Image Generation</h3>
-                <p className="text-gray-600 text-sm">Create stunning images from text descriptions using advanced AI</p>
+                <h3 className="font-semibold text-gray-800 mb-2">
+                  AI Image Generation
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Create stunning images from text descriptions using advanced
+                  AI
+                </p>
               </div>
-              
+
               <div className="text-center p-6">
                 <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
                   <Upload className="w-6 h-6 text-blue-600" />
                 </div>
-                <h3 className="font-semibold text-gray-800 mb-2">Image-to-Image</h3>
-                <p className="text-gray-600 text-sm">Upload an image and transform it based on your prompt</p>
+                <h3 className="font-semibold text-gray-800 mb-2">
+                  Image-to-Image
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Upload an image and transform it based on your prompt
+                </p>
               </div>
-              
+
               <div className="text-center p-6">
                 <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
                   <div className="w-6 h-6 bg-green-600 rounded"></div>
                 </div>
-                <h3 className="font-semibold text-gray-800 mb-2">High Quality Output</h3>
-                <p className="text-gray-600 text-sm">Generate high-resolution images perfect for any use case</p>
+                <h3 className="font-semibold text-gray-800 mb-2">
+                  High Quality Output
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  Generate high-resolution images perfect for any use case
+                </p>
               </div>
             </div>
           )}
@@ -294,6 +316,5 @@ const CustomAds = () => {
     </StudioLayout>
   );
 };
-
 
 export default CustomAds;
