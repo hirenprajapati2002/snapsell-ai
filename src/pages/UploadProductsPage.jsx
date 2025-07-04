@@ -68,7 +68,7 @@ const UploadProductsPage = () => {
     return (
         <div className="min-h-screen bg-gray-50">
             <StudioNavbar />
-            <div className="flex">
+            <div className="flex pt-16">
                 <StudioSidebar />
                 <div className="flex-1 ml-60 p-6">
                     <div className="flex justify-between items-center mb-8">

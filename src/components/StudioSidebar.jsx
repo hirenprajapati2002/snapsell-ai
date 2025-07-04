@@ -45,12 +45,12 @@ const StudioSidebar = () => {
   const toggleAIBanner = () => setIsAIBannerOpen(!isAIBannerOpen);
 
   return (
-    <aside className="w-60 bg-white h-screen border-r px-4 py-6 flex flex-col justify-between fixed">
+    <aside className="w-60 bg-white h-[calc(100vh-4rem)] border-r px-4 py-6 flex flex-col justify-between fixed top-16 left-0 z-20">
       <div>
         {/* Logo */}
-        <div className="mb-8 flex items-center text-2xl font-extrabold text-gray-800">
+        {/* <div className="mb-8 flex items-center text-2xl font-extrabold text-gray-800">
           Snapsell.<span className="text-purple-700">AI</span>
-        </div>
+        </div> */}
 
         {/* Menu */}
         <div className="space-y-2">

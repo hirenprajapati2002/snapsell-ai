@@ -59,7 +59,14 @@ const StudioNavbar = () => {
   }, []);
 
   return (
-    <nav className="h-16 bg-white border-b border-gray-200 px-6 flex items-center justify-end relative z-30">
+    <nav className="h-16 bg-white border-b border-gray-200 px-6 flex items-center justify-between fixed top-0 left-0 right-0 z-30">
+      {/* Left Side: Logo */}
+      <div className="flex items-center">
+        <div className="text-2xl font-extrabold text-gray-800">
+          Snapsell.<span className="text-purple-700">AI</span>
+        </div>
+      </div>
+
       {/* Right Side: Profile Dropdown */}
       <div className="flex items-center">
         <div className="relative" ref={menuRef}>
