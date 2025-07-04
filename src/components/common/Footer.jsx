@@ -107,22 +107,10 @@ const Footer = () => {
                             <img src={InstagramIcon} alt="Instagram" className="w-full h-full object-contain" />
                         </div>
                         <div className="w-10 h-10 bg-[#1A1A1A] rounded-full p-2 hover:bg-[#252525] transition-colors">
-                            <img src={PinterestIcon} alt="Pinterest" className="w-full h-full object-contain" />
-                        </div>
-                        <div className="w-10 h-10 bg-[#1A1A1A] rounded-full p-2 hover:bg-[#252525] transition-colors">
                             <img src={TwitterIcon} alt="Twitter" className="w-full h-full object-contain" />
                         </div>
                         <div className="w-10 h-10 bg-[#1A1A1A] rounded-full p-2 hover:bg-[#252525] transition-colors">
                             <img src={LinkedInIcon} alt="LinkedIn" className="w-full h-full object-contain" />
-                        </div>
-                        <div className="w-10 h-10 bg-[#1A1A1A] rounded-full p-2 hover:bg-[#252525] transition-colors">
-                            <img src={AmazonIcon} alt="Amazon" className="w-full h-full object-contain" />
-                        </div>
-                        <div className="w-10 h-10 bg-[#1A1A1A] rounded-full p-2 hover:bg-[#252525] transition-colors">
-                            <img src={ShopifyIcon} alt="Shopify" className="w-full h-full object-contain" />
-                        </div>
-                        <div className="w-10 h-10 bg-[#1A1A1A] rounded-full p-2 hover:bg-[#252525] transition-colors">
-                            <img src={EtsyIcon} alt="Etsy" className="w-full h-full object-contain" />
                         </div>
                     </div>
                 </div>

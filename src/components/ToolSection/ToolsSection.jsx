@@ -53,6 +53,7 @@ const tools = [
 
 const ToolsSection = () => {
     return (
+        <>
         <section className="bg-white px-[10px] md:px-[50px] pt-[48px] md:pt-[96px] pb-[96px]">
             {/* Header */}
             <div className="text-center mb-12">
@@ -143,8 +144,9 @@ const ToolsSection = () => {
             </div>
 
             {/* Footer Section */}
-            <Footer />
         </section>
+            <Footer />
+        </>
     );
 };
 
