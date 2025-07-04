@@ -1,10 +1,11 @@
 // src/services/imageGenerationService.js
 import apiClient from '../utils/apiClient';
 
-export const generateImage = async (prompt, imageFile = null) => {
+export const generateImage = async (prompt, imageFile = null, model = 'gemini') => {
   try {
     const formData = new FormData();
     formData.append('prompt', prompt);
+    formData.append('model', model);
     
     if (imageFile) {
       formData.append('image', imageFile);
@@ -39,4 +40,3 @@ export const generateImageWithPrompts = async (prompts) => {
     throw error;
   }
 };
-    

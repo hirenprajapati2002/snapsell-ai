@@ -14,6 +14,7 @@ const CustomAds = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [error, setError] = useState("");
   const [showImageModal, setShowImageModal] = useState(false);
+  const [model, setModel] = useState("gemini"); // New state for model selection
 
   usePrivateRoutes(); // Protected route
 
@@ -29,7 +30,7 @@ const CustomAds = () => {
     setGeneratedImage(null);
 
     try {
-      const result = await generateImage(prompt, selectedImage);
+      const result = await generateImage(prompt, selectedImage, model); // Pass model to API
       setGeneratedImage(result);
       setShowImageModal(true); // Show modal when image is generated
     } catch (error) {
@@ -167,13 +168,18 @@ const CustomAds = () => {
                     </span>
                   </button>
 
-                  {/* Mic Button */}
-                  <button
-                    type="button"
-                    className="flex-shrink-0 p-2 text-gray-400 hover:text-gray-600 transition-colors"
-                  >
-                    <Mic className="w-5 h-5" />
-                  </button>
+                  {/* Dropdown for Model Selection */}
+                  <div className="relative">
+                    <select
+                      className="flex-shrink-0 px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all text-sm appearance-none cursor-pointer min-w-[110px] font-semibold"
+                      value={model}
+                      onChange={e => setModel(e.target.value)}
+                      style={{ backgroundPosition: 'right 0.75rem center', backgroundRepeat: 'no-repeat', backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'16\' height=\'16\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M4 6l4 4 4-4\' stroke=\'%236B7280\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'/%3E%3C/svg%3E")' }}
+                    >
+                      <option value="gemini">Gemini</option>
+                      <option value="openai">OpenAI</option>
+                    </select>
+                  </div>
                 </div>
               </div>
             </form>

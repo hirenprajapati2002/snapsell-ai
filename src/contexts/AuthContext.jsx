@@ -88,7 +88,6 @@ export const AuthProvider = ({ children }) => {
 
                 // Show welcome tooltip and redirect to create page
                 setTimeout(() => {
-                    alert("Welcome! Let's create your first product poster!");
                     window.location.href = '/dashboard';
                 }, 500);
 
