@@ -1,16 +1,14 @@
-// src/pages/CreatePage.jsx
 import React from 'react';
+import MyCatalogs from '../components/catalog/MyCatalogs';
 import StudioLayout from '../layouts/StudioLayout';
-import BannerSlider from '../components/BannerSlider';
-import UploadSection from '../components/common/UploadSection';
 
-const CreatePage = () => {
+const CatalogPage = () => {
   return (
     <StudioLayout>
       {/* <BannerSlider /> */}
-      <UploadSection/>
+      <MyCatalogs />
     </StudioLayout>
   );
 };
 
-export default CreatePage;
+export default CatalogPage;

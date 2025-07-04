@@ -18,19 +18,20 @@ const CatalogModal = ({ isOpen, onClose, onSubmit }) => {
       fields: [
         { name: 'productName', placeholder: 'Enter product name', type: 'text' },
         { name: 'productPrice', placeholder: 'Enter product price', type: 'text' },
+        { name: 'productImage', type: 'file', accept: 'image/*' },
       ],
     },
     {
-      title: 'QR Code',
+      title: 'Processing',
       fields: [
-        { name: 'qrCode', placeholder: 'Enter QR Code Link', type: 'text' },
+        { name: 'processing', type: 'processing' },
       ],
     },
   ];
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50 px-4">
-      <div className="bg-white w-full max-w-4xl rounded-xl shadow-xl p-8 relative">
+      <div className="bg-white w-full max-w-4xl rounded-xl shadow-xl p-8 relative mt-32 mb-16">
         {/* Close Button */}
         <button
           className="absolute top-4 right-4 text-xl text-gray-600 hover:text-gray-900"

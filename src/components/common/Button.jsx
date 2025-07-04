@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Button = ({ onClick, children, variant = 'primary' }) => {
+const Button = ({ onClick, children, variant = 'primary', className = '' }) => {
   const base =
     'px-6 py-2 rounded font-semibold transition-all focus:outline-none';
 
@@ -10,7 +10,7 @@ const Button = ({ onClick, children, variant = 'primary' }) => {
   };
 
   return (
-    <button className={styles[variant]} onClick={onClick}>
+    <button className={`${styles[variant]} ${className}`} onClick={onClick}>
       {children}
     </button>
   );
