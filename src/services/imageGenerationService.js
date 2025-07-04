@@ -7,10 +7,10 @@ export const generateImage = async (prompt, imageFile = null) => {
     formData.append('prompt', prompt);
     
     if (imageFile) {
-      formData.append('image[]', imageFile);
+      formData.append('image', imageFile);
     }
 
-    const response = await apiClient.post('/use-openai', formData, {
+    const response = await apiClient.post('/generate-image', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
