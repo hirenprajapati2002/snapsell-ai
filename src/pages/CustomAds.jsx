@@ -4,6 +4,7 @@ import { Mic, Plus, Wand2, Upload, Loader2, X, Download } from 'lucide-react';
 import { generateImage } from '../services/imageGenerationService';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { useAuth } from '../contexts/AuthContext';
+import usePrivateRoutes from '../hooks/usePrivateRoutes';
 
 const CustomAds = () => {
   const { user } = useAuth();
@@ -13,6 +14,8 @@ const CustomAds = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [error, setError] = useState('');
   const [showImageModal, setShowImageModal] = useState(false);
+
+  usePrivateRoutes(); // Protected route
 
   const handleSubmit = async (e) => {
     e.preventDefault();

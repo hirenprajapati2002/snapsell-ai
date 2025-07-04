@@ -5,6 +5,7 @@ import StudioLayout from '../layouts/StudioLayout';
 import TemplateDetailModal from '../components/templates/TemplateDetailModal';
 import TemplateEditModal from '../components/templates/TemplateEditModal';
 import templateService from '../services/templateService';
+import usePrivateRoutes from '../hooks/usePrivateRoutes';
 
 const PredefinedTemplatesPage = () => {
   const [templates, setTemplates] = useState([]);
@@ -17,6 +18,8 @@ const PredefinedTemplatesPage = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+
+  usePrivateRoutes(); // Protected route
 
   // Fetch templates from API
   useEffect(() => {
@@ -371,7 +374,7 @@ const PredefinedTemplatesPage = () => {
         <div className="mb-8">
           <div className="mb-6">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Snapsell.AI Templates
+              Predefined Festival Templates
             </h1>
             <p className="text-gray-600">
               Ready-to-use templates for upcoming festivals. Customize them to match your brand and boost your sales.

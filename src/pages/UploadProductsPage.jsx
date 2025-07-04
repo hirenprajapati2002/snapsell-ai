@@ -4,12 +4,15 @@ import { Plus, Search, Filter, ArrowDown, Package, Edit, Trash2 } from 'lucide-r
 import StudioNavbar from '../components/StudioNavbar';
 import StudioSidebar from '../components/StudioSidebar';
 import AddProductModal from '../components/AddProductModal';
+import usePrivateRoutes from '../hooks/usePrivateRoutes';
 
 const UploadProductsPage = () => {
     const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
     const [products, setProducts] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+
+  usePrivateRoutes(); // Protected route
 
     // Sample data for demonstration
     useEffect(() => {

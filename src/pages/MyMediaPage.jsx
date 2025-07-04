@@ -6,6 +6,7 @@ import StudioSidebar from '../components/StudioSidebar';
 import { mediaService } from '../services/mediaService';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { Link } from 'react-router-dom';
+import usePrivateRoutes from '../hooks/usePrivateRoutes';
 
 const MyMediaPage = () => {
     const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
@@ -14,6 +15,8 @@ const MyMediaPage = () => {
     const [mediaItems, setMediaItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+  usePrivateRoutes(); // Protected route
 
     // Fetch media from API
     useEffect(() => {

@@ -4,8 +4,11 @@ import AdHeroSection from '../components/common/AI-banners/AdHeroSection';
 import AdFooterSection from '../components/common/AI-banners/AdFooterSection';
 import PredefinedTemplatesSection from '../components/common/AI-banners/PredefinedTemplatesSection';
 import productImage from '../assets/ads/Product-ecom.png';
+import usePrivateRoutes from '../hooks/usePrivateRoutes';
 
 const ProductEcomAds = () => {
+  usePrivateRoutes(); // Protected route
+
   return (
   <StudioLayout>
 <>

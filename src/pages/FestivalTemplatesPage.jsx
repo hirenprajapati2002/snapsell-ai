@@ -7,6 +7,7 @@ import TemplateCard from '../components/templates/TemplateCard';
 import TemplateDetailModal from '../components/templates/TemplateDetailModal';
 import TemplateEditModal from '../components/templates/TemplateEditModal';
 import { festivalTemplatesData } from '../data/festivalTemplatesData';
+import usePrivateRoutes from '../hooks/usePrivateRoutes';
 
 const FestivalTemplatesPage = () => {
   const [templates, setTemplates] = useState(festivalTemplatesData);
@@ -17,6 +18,8 @@ const FestivalTemplatesPage = () => {
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+
+  usePrivateRoutes(); // Protected route
 
   // Filter templates based on search and category
   useEffect(() => {
