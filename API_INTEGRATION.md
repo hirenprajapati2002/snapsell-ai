@@ -47,7 +47,7 @@ Content-Type: application/json
 
 Body:
 {
-  "fullName": "John Doe",
+  "name": "John Doe",
   "email": "john@example.com",
   "password": "password123"
 }

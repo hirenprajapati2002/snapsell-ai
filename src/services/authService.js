@@ -5,7 +5,7 @@ export const authService = {
     // Login API call
     login: async (email, password) => {
         try {
-            const response = await apiClient.post('/auth/login', {
+            const response = await apiClient.post('/login', {
                 email,
                 password,
             });
@@ -35,10 +35,10 @@ export const authService = {
     },
 
     // Register API call
-    register: async (fullName, email, password) => {
+    register: async (name, email, password) => {
         try {
-            const response = await apiClient.post('/auth/register', {
-                fullName,
+            const response = await apiClient.post('/register', {
+                name,
                 email,
                 password,
             });
@@ -70,7 +70,7 @@ export const authService = {
     // Forgot Password API call
     forgotPassword: async (email) => {
         try {
-            const response = await apiClient.post('/auth/forgot-password', {
+            const response = await apiClient.post('/forgot-password', {
                 email,
             });
 
@@ -95,7 +95,7 @@ export const authService = {
     // Reset Password API call
     resetPassword: async (token, newPassword) => {
         try {
-            const response = await apiClient.post('/auth/reset-password', {
+            const response = await apiClient.post('/reset-password', {
                 token,
                 newPassword,
             });
@@ -121,11 +121,11 @@ export const authService = {
     // Verify Token API call
     verifyToken: async () => {
         try {
-            const response = await apiClient.get('/auth/verify');
+            const response = await apiClient.get('/me');
 
             return {
                 success: true,
-                data: response.data.user,
+                data: response.data,
             };
         } catch (error) {
             console.error('Token verification error:', error);
@@ -141,10 +141,36 @@ export const authService = {
         }
     },
 
+    // Get current user data from API
+    getCurrentUserData: async () => {
+        try {
+            const response = await apiClient.get('/me');
+            
+            // Update localStorage with fresh user data
+            localStorage.setItem('user', JSON.stringify(response.data));
+            
+            return {
+                success: true,
+                data: response.data,
+            };
+        } catch (error) {
+            console.error('Get current user error:', error);
+
+            // Clear invalid token
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('user');
+
+            return {
+                success: false,
+                error: 'Failed to fetch user data',
+            };
+        }
+    },
+
     // Logout API call
     logout: async () => {
         try {
-            await apiClient.post('/auth/logout');
+            await apiClient.post('/logout');
         } catch (error) {
             console.error('Logout error:', error);
         } finally {

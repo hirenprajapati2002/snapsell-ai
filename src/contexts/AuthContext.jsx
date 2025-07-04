@@ -19,18 +19,44 @@ export const AuthProvider = ({ children }) => {
     const [isForgotPasswordModalOpen, setIsForgotPasswordModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
+    // Fetch user data from API
+    const fetchUserData = async () => {
+        try {
+            console.log('Fetching user data from API...');
+            const result = await authService.getCurrentUserData();
+            console.log('API response:', result);
+            if (result.success) {
+                console.log('Setting user data:', result.data);
+                setUser(result.data);
+                return result.data;
+            } else {
+                console.log('Failed to fetch user data:', result.error);
+                setUser(null);
+                return null;
+            }
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+            setUser(null);
+            return null;
+        }
+    };
+
     // Check for existing user session on app load
     useEffect(() => {
         const initializeAuth = async () => {
+            console.log('Initializing auth...');
             const currentUser = authService.getCurrentUser();
-            if (currentUser && authService.isAuthenticated()) {
-                // Verify token is still valid
-                const verification = await authService.verifyToken();
-                if (verification.success) {
-                    setUser(verification.data);
-                } else {
-                    setUser(null);
-                }
+            const token = localStorage.getItem('authToken');
+            console.log('Current user from localStorage:', currentUser);
+            console.log('Token exists:', !!token);
+            
+            if (token && authService.isAuthenticated()) {
+                console.log('User is authenticated, fetching fresh data...');
+                // Fetch fresh user data from API
+                await fetchUserData();
+            } else {
+                console.log('User not authenticated');
+                setUser(null);
             }
             setIsLoading(false);
         };
@@ -61,9 +87,9 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const register = async (fullName, email, password) => {
+    const register = async (name, email, password) => {
         try {
-            const result = await authService.register(fullName, email, password);
+            const result = await authService.register(name, email, password);
 
             if (result.success) {
                 setUser(result.data.user);
@@ -147,6 +173,7 @@ export const AuthProvider = ({ children }) => {
         register,
         forgotPassword,
         logout,
+        fetchUserData,
         isLoginModalOpen,
         isRegisterModalOpen,
         isForgotPasswordModalOpen,

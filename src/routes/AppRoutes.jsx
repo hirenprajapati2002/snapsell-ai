@@ -8,6 +8,7 @@ import ProductEcomAds from '../pages/ProductEcomAds';
 import SocialAds from '../pages/SocialAds';
 import CustomAds from '../pages/CustomAds';
 import UploadProductsPage from '../pages/UploadProductsPage';
+import MyMediaPage from '../pages/MyMediaPage';
 
 const AppRoutes = () => {
   return (
@@ -15,6 +16,7 @@ const AppRoutes = () => {
       <Route path="/" element={<HomePage />} />
       <Route path="/dashboard" element={<DashboardPage />} />
       <Route path="/upload-products" element={<UploadProductsPage />} />
+      <Route path="/my-media" element={<MyMediaPage />} />
       <Route path="/create" element={<CreatePage />} />
       <Route path="/product-ecom-ads" element={<ProductEcomAds />} />
       <Route path="/social-ads" element={<SocialAds />} />

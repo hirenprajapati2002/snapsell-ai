@@ -15,6 +15,7 @@ import {
   Share2,
   Calendar,
   TrendingUp,
+  Images,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -38,8 +39,10 @@ const SidebarItem = ({ icon: Icon, label, active, beta, onClick, isDropdown }) =
 
 const StudioSidebar = () => {
   const [isBannersOpen, setIsBannersOpen] = useState(true);
+  const [isAIBannerOpen, setIsAIBannerOpen] = useState(false);
 
   const toggleBanners = () => setIsBannersOpen(!isBannersOpen);
+  const toggleAIBanner = () => setIsAIBannerOpen(!isAIBannerOpen);
 
   return (
     <aside className="w-60 bg-white h-screen border-r px-4 py-6 flex flex-col justify-between fixed">
@@ -56,9 +59,34 @@ const StudioSidebar = () => {
             <SidebarItem icon={Home} label="Dashboard" />
           </Link>
 
-          {/* Upload Products */}
-          <Link to="/upload-products">
-            <SidebarItem icon={Upload} label="Upload Products" />
+          {/* AI Banner Dropdown */}
+          <SidebarItem
+            icon={ImageIcon}
+            label="AI Banners"
+            active={isAIBannerOpen}
+            onClick={toggleAIBanner}
+            isDropdown
+          />
+
+          {/* AI Banner Dropdown links */}
+          {isAIBannerOpen && (
+            <div className="ml-6 space-y-1">
+              <Link to="/predefined-templates">
+                <div className="text-sm text-gray-700 px-3 py-1 rounded cursor-pointer hover:bg-gray-100">
+                  Predefined Templates
+                </div>
+              </Link>
+              <Link to="/upload-products">
+                <div className="text-sm text-gray-700 px-3 py-1 rounded cursor-pointer hover:bg-gray-100">
+                  Custom Generator
+                </div>
+              </Link>
+            </div>
+          )}
+
+          {/* My Media */}
+          <Link to="/my-media">
+            <SidebarItem icon={Images} label="My Media" />
           </Link>
 
           {/* Catalogs */}
@@ -86,28 +114,27 @@ const StudioSidebar = () => {
             <SidebarItem icon={TrendingUp} label="Insights" />
           </Link>
 
-          <hr className="my-4 border-gray-200" />
-
+      
           {/* Create Tools Section */}
-          <div className="text-xs text-gray-500 uppercase tracking-wide px-3 py-2 font-semibold">
+          {/* <div className="text-xs text-gray-500 uppercase tracking-wide px-3 py-2 font-semibold">
             Create Tools
-          </div>
+          </div> */}
 
-          <Link to="/create">
+          {/* <Link to="/create">
             <SidebarItem icon={Plus} label="Create" />
-          </Link>
+          </Link> */}
 
-          {/* Dropdown parent */}
+          {/* Dropdown parent
           <SidebarItem
             icon={ImageIcon}
             label="AI Banners"
             active={isBannersOpen}
             onClick={toggleBanners}
             isDropdown
-          />
+          /> */}
 
           {/* Dropdown links */}
-          {isBannersOpen && (
+          {/* {isBannersOpen && (
             <div className="ml-6 space-y-1">
               <Link to="/product-ecom-ads">
                 <div className="text-sm text-purple-700 bg-[#f1efff] px-3 py-1 rounded cursor-pointer hover:bg-[#e7e4ff]">
@@ -125,30 +152,10 @@ const StudioSidebar = () => {
                 </div>
               </Link>
             </div>
-          )}
+          )} */}
 
-          {/* Static menu */}
-          <Link to="/image-gpt">
-            <SidebarItem icon={Wand2} label="Image GPT" />
-          </Link>
-          <Link to="/ai-tools">
-            <SidebarItem icon={LayoutDashboard} label="AI Tools" />
-          </Link>
-          <Link to="/uploads">
-            <SidebarItem icon={Upload} label="Uploads" />
-          </Link>
-          <Link to="/studio-designs">
-            <SidebarItem icon={Palette} label="Your Studio Designs" />
-          </Link>
-          <Link to="/brand">
-            <SidebarItem icon={Settings} label="Brand" />
-          </Link>
+          
         </div>
-      </div>
-
-      {/* Bottom */}
-      <div className="text-xs text-gray-500 px-3 py-2 cursor-pointer hover:text-gray-700">
-        Preferences
       </div>
     </aside>
   );

@@ -25,7 +25,7 @@ const AuthModal = () => {
     });
 
     const [registerData, setRegisterData] = useState({
-        fullName: '',
+        name: '',
         email: '',
         password: '',
     });
@@ -71,15 +71,15 @@ const AuthModal = () => {
         setIsLoading(true);
 
         // Enhanced validation
-        if (!registerData.fullName || !registerData.email || !registerData.password) {
+        if (!registerData.name || !registerData.email || !registerData.password) {
             setErrors({ general: 'Please fill in all fields' });
             setIsLoading(false);
             return;
         }
 
-        const nameValidation = validateName(registerData.fullName);
+        const nameValidation = validateName(registerData.name);
         if (!nameValidation.isValid) {
-            setErrors({ fullName: nameValidation.error });
+            setErrors({ name: nameValidation.error });
             setIsLoading(false);
             return;
         }
@@ -97,7 +97,7 @@ const AuthModal = () => {
             return;
         }
 
-        const result = await register(registerData.fullName, registerData.email, registerData.password);
+        const result = await register(registerData.name, registerData.email, registerData.password);
 
         if (!result.success) {
             setErrors({ general: result.error });
@@ -137,7 +137,7 @@ const AuthModal = () => {
         closeModals();
         setErrors({});
         setLoginData({ email: '', password: '' });
-        setRegisterData({ fullName: '', email: '', password: '' });
+        setRegisterData({ name: '', email: '', password: '' });
         setForgotPasswordData({ email: '' });
     };
 
@@ -328,15 +328,15 @@ const AuthModal = () => {
                                 </label>
                                 <input
                                     type="text"
-                                    value={registerData.fullName}
-                                    onChange={(e) => setRegisterData({ ...registerData, fullName: e.target.value })}
-                                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none text-gray-900 bg-white ${errors.fullName ? 'border-red-300' : 'border-gray-300'
+                                    value={registerData.name}
+                                    onChange={(e) => setRegisterData({ ...registerData, name: e.target.value })}
+                                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none text-gray-900 bg-white ${errors.name ? 'border-red-300' : 'border-gray-300'
                                         }`}
                                     placeholder="Enter your full name"
                                     required
                                 />
-                                {errors.fullName && (
-                                    <p className="text-red-500 text-xs mt-1">{errors.fullName}</p>
+                                {errors.name && (
+                                    <p className="text-red-500 text-xs mt-1">{errors.name}</p>
                                 )}
                             </div>
 
