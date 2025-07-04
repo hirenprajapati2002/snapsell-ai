@@ -11,6 +11,7 @@ import MyMediaPage from '../pages/MyMediaPage';
 import FestivalTemplatesPage from '../pages/FestivalTemplatesPage';
 import PredefinedTemplatesPage from '../pages/PredefinedTemplatesPage';
 import CatalogPage from '../pages/CatalogPage';
+import CampaignsPage from '../pages/CampaignsPage';
 
 const AppRoutes = () => {
   return (
@@ -27,6 +28,7 @@ const AppRoutes = () => {
       <Route path="/my-catalogs" element={<CatalogPage />} />
       <Route path="/catalogs" element={<CatalogPage />} />
       <Route path="/create-catalog" element={<CreatePage />} />
+      <Route path="/campaigns" element={<CampaignsPage />} />
     </Routes>
   );
 };

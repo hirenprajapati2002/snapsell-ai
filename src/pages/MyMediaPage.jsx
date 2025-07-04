@@ -1,6 +1,6 @@
 // src/pages/MyMediaPage.jsx
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, Grid, List, Image, Video, FileText, Download, Trash2, Star } from 'lucide-react';
+import { Search, Filter, Grid, List, Image, Video, FileText, Download, Trash2, Star, Images } from 'lucide-react';
 import StudioNavbar from '../components/StudioNavbar';
 import StudioSidebar from '../components/StudioSidebar';
 import { mediaService } from '../services/mediaService';
@@ -16,7 +16,7 @@ const MyMediaPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-  usePrivateRoutes(); // Protected route
+    usePrivateRoutes(); // Protected route
 
     // Fetch media from API
     useEffect(() => {
