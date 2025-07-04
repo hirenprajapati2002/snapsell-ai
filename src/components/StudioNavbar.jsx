@@ -9,34 +9,14 @@ const StudioNavbar = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const menuRef = useRef();
 
-  // Fetch fresh user data when component mounts
-  useEffect(() => {
-    console.log('StudioNavbar: Current user state:', user);
-    if (user) {
-      console.log('StudioNavbar: User exists, fetching fresh data...');
-      fetchUserData();
-    }
-  }, [fetchUserData]);
 
-  // Log user changes
-  useEffect(() => {
-    console.log('StudioNavbar: User data updated:', user);
-  }, [user]);
+
+
 
   const handleRefreshUser = async () => {
     setIsRefreshing(true);
-    console.log('Manual refresh triggered');
     await fetchUserData();
     setIsRefreshing(false);
-  };
-
-  // Test function to set a token manually
-  const handleTestAPI = () => {
-    // Set the JWT token from your Postman test - REPLACE WITH YOUR ACTUAL TOKEN
-    const testToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."; // Replace with your actual JWT token
-    localStorage.setItem('authToken', testToken);
-    console.log('Token set, now fetching user data...');
-    fetchUserData();
   };
 
   const handleAuthClick = () => {

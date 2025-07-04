@@ -22,15 +22,11 @@ export const AuthProvider = ({ children }) => {
     // Fetch user data from API
     const fetchUserData = async () => {
         try {
-            console.log('Fetching user data from API...');
             const result = await authService.getCurrentUserData();
-            console.log('API response:', result);
             if (result.success) {
-                console.log('Setting user data:', result.data);
                 setUser(result.data);
                 return result.data;
             } else {
-                console.log('Failed to fetch user data:', result.error);
                 setUser(null);
                 return null;
             }
@@ -44,18 +40,13 @@ export const AuthProvider = ({ children }) => {
     // Check for existing user session on app load
     useEffect(() => {
         const initializeAuth = async () => {
-            console.log('Initializing auth...');
             const currentUser = authService.getCurrentUser();
             const token = localStorage.getItem('authToken');
-            console.log('Current user from localStorage:', currentUser);
-            console.log('Token exists:', !!token);
             
             if (token && authService.isAuthenticated()) {
-                console.log('User is authenticated, fetching fresh data...');
                 // Fetch fresh user data from API
                 await fetchUserData();
             } else {
-                console.log('User not authenticated');
                 setUser(null);
             }
             setIsLoading(false);

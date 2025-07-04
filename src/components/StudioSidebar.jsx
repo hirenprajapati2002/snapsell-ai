@@ -86,7 +86,7 @@ const StudioSidebar = () => {
                   Predefined Templates
                 </div>
               </Link>
-              <Link to="/upload-products">
+              <Link to="/custom-ads">
                 <div className="text-sm text-gray-700 px-3 py-1 rounded cursor-pointer hover:bg-gray-100">
                   Custom Generator
                 </div>
