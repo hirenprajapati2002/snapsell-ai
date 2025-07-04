@@ -97,4 +97,16 @@ export async function getMyCatalogs() {
     console.error('Error in getMyCatalogs:', error);
     throw error;
   }
+}
+
+// Delete a catalog by ID
+export async function deleteCatalog(catalogId) {
+  try {
+    const response = await apiClient.delete(`/catalog/${catalogId}`);
+    console.log('Delete catalog response:', response);
+    return response.data;
+  } catch (error) {
+    console.error('Error in deleteCatalog:', error);
+    throw error;
+  }
 } 

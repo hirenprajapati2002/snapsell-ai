@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UploadCloud } from 'lucide-react';
 import { generateCatalogPDF } from '../../services/catalogService';
-//import { useToast } from '../../contexts/ToastContext';
+import { useToast } from '../../contexts/ToastContext';
 import { extractSuccessMessage, extractErrorMessage } from '../../utils/messageExtractor';
 
 const StepperForm = ({ steps, onSubmit, template_id }) => {
@@ -16,7 +16,11 @@ const StepperForm = ({ steps, onSubmit, template_id }) => {
     const [error, setError] = useState("");
     const [isProcessing, setIsProcessing] = useState(false);
     const navigate = useNavigate();
-   // const { showSuccess, showError } = useToast();
+    const { showError } = useToast();
+    // Add to StepperForm state:
+    const [storeImages, setStoreImages] = useState([]);
+    const MAX_STORE_IMAGES = 6;
+    const [storeImageError, setStoreImageError] = useState('');
 
     // Ensure at least one product input is always shown
     useEffect(() => {
@@ -27,10 +31,27 @@ const StepperForm = ({ steps, onSubmit, template_id }) => {
 
     const handleChange = (e, name) => {
         const { value, files } = e.target;
-        setFormData({
-            ...formData,
-            [name]: files ? files[0] : value,
-        });
+        if (name === 'storeImage') {
+            setStoreImageError('');
+            let fileArray = Array.from(files);
+            if (fileArray.length + storeImages.length > MAX_STORE_IMAGES) {
+                setStoreImageError('Maximum 6 images allowed.');
+                fileArray = fileArray.slice(0, MAX_STORE_IMAGES - storeImages.length);
+            }
+            const newImages = fileArray.map(file => ({
+                id: Date.now() + Math.random(),
+                file,
+                preview: URL.createObjectURL(file),
+                name: file.name
+            }));
+            setStoreImages(prev => [...prev, ...newImages].slice(0, MAX_STORE_IMAGES));
+            setFormData({ ...formData, [name]: [...(formData[name] || []), ...fileArray].slice(0, MAX_STORE_IMAGES) });
+        } else {
+            setFormData({
+                ...formData,
+                [name]: files ? files[0] : value,
+            });
+        }
     };
 
     const addProduct = () => {
@@ -328,6 +349,57 @@ const StepperForm = ({ steps, onSubmit, template_id }) => {
                             );
                         }
                         if (field.type === 'file') {
+                            if (field.name === 'storeImage') {
+                                return (
+                                    <div key={field.name}>
+                                        {/* Preview row for all images (always at the top) */}
+                                        {storeImages.length > 0 && (
+                                            <div className="flex flex-wrap gap-3 mb-4">
+                                                {storeImages.map(img => (
+                                                    <div key={img.id} className="relative inline-block">
+                                                        <img
+                                                            src={img.preview}
+                                                            alt="Preview"
+                                                            className="w-20 h-20 object-cover rounded shadow border bg-white"
+                                                        />
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => {
+                                                                setStoreImages(prev => prev.filter(i => i.id !== img.id));
+                                                                setFormData({ ...formData, storeImage: (formData.storeImage || []).filter(f => f.name !== img.name) });
+                                                            }}
+                                                            className="absolute -top-2 -right-2 bg-white border border-gray-300 rounded-full w-5 h-5 flex items-center justify-center text-xs text-gray-700 hover:bg-red-100 hover:text-red-600 shadow"
+                                                            aria-label="Remove image"
+                                                        >
+                                                            ×
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                                            {field.placeholder || 'Upload Image'}
+                                        </label>
+                                        <div className="relative w-full border-2 border-dashed border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:border-purple-500 transition">
+                                            <UploadCloud className="w-8 h-8 text-gray-400 mb-2" />
+                                            <p className="text-gray-500 text-sm">Click to upload image</p>
+                                            <p className="text-xs text-gray-400">PNG, JPG up to 10MB. Maximum 6 images allowed.</p>
+                                            <input
+                                                type="file"
+                                                name={field.name}
+                                                accept={field.accept}
+                                                multiple
+                                                onChange={(e) => handleChange(e, field.name)}
+                                                className="absolute opacity-0 inset-0 cursor-pointer"
+                                                style={{ height: '100%', width: '100%' }}
+                                            />
+                                        </div>
+                                        {storeImageError && (
+                                            <div className="text-red-500 text-xs mt-1">{storeImageError}</div>
+                                        )}
+                                    </div>
+                                );
+                            }
                             const file = formData[field.name];
                             const isImage = file && file.type && file.type.startsWith('image/');
                             let imageUrl = '';

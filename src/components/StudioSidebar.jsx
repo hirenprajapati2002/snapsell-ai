@@ -36,7 +36,6 @@ const StudioSidebar = () => {
   const location = useLocation();
   const [isAIBannerOpen, setIsAIBannerOpen] = useState(false);
   const [isCatalogOpen, setIsCatalogOpen] = useState(false);
-  const [showTemplateModal, setShowTemplateModal] = useState(false);
   const [showCatalogModal, setShowCatalogModal] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
 
@@ -63,11 +62,6 @@ const StudioSidebar = () => {
   };
 
   const handleCreateCatalog = () => {
-    setShowTemplateModal(true);
-  };
-
-  const handleTemplateSelect = (template) => {
-    setSelectedTemplate(template);
     setShowCatalogModal(true);
   };
 
@@ -139,10 +133,6 @@ const StudioSidebar = () => {
           </Link>
 
           {/* Catalogs Section */}
-          {/* <Link to="/catalogs">
-            <SidebarItem icon={FolderOpen} label="Catalogs" />
-          </Link> */}
-
           <SidebarItem
             icon={FolderOpen}
             label="Catalogs"
@@ -154,13 +144,12 @@ const StudioSidebar = () => {
           {/* Catalog Dropdown */}
           {isCatalogOpen && (
             <div className="ml-6 space-y-1">
-              {/* ✅ Create Catalog opens template selection modal */}
-              <div 
-                onClick={handleCreateCatalog}
-                className="text-sm text-gray-700 px-3 py-1 rounded cursor-pointer hover:bg-gray-100"
-              >
-                Create Catalog
-              </div>
+              {/* ✅ Create Catalog navigates to template selection page */}
+              <Link to="/select-template">
+                <div className="text-sm text-gray-700 px-3 py-1 rounded cursor-pointer hover:bg-gray-100">
+                  Create Catalog
+                </div>
+              </Link>
 
               {/* ✅ My Catalogs links to the catalog page */}
               <Link to="/catalogs">
@@ -182,13 +171,6 @@ const StudioSidebar = () => {
 
         </div>
       </div>
-
-      {/* Template Selection Modal */}
-      <TemplateSelectionModal
-        isOpen={showTemplateModal}
-        onClose={() => setShowTemplateModal(false)}
-        onTemplateSelect={handleTemplateSelect}
-      />
 
       {/* ✅ Catalog Modal Popup */}
       <CatalogModal

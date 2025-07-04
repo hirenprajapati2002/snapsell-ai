@@ -2,11 +2,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ChevronDown, User, LogOut, Settings, RefreshCw } from "lucide-react";
 import { useAuth } from '../contexts/AuthContext';
+import ProfileUpdateModal from './ProfileUpdateModal';
 
 const StudioNavbar = () => {
   const { user, logout, openLoginModal, fetchUserData } = useAuth();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [showProfileUpdateModal, setShowProfileUpdateModal] = useState(false);
   const menuRef = useRef();
 
 
@@ -118,6 +120,13 @@ const StudioNavbar = () => {
                   <Settings className="w-4 h-4 mr-3 text-gray-600" />
                   <span className="text-gray-700">Settings</span>
                 </div>
+                <div
+                  className="px-4 py-2 hover:bg-gray-50 cursor-pointer flex items-center"
+                  onClick={() => { setShowProfileUpdateModal(true); setShowProfileMenu(false); }}
+                >
+                  <RefreshCw className="w-4 h-4 mr-3 text-gray-600" />
+                  <span className="text-gray-700">Update Profile</span>
+                </div>
               </div>
 
               {/* Logout */}
@@ -137,6 +146,13 @@ const StudioNavbar = () => {
           )}
         </div>
       </div>
+      {showProfileUpdateModal && (
+        <ProfileUpdateModal
+          isOpen={showProfileUpdateModal}
+          onClose={() => setShowProfileUpdateModal(false)}
+          user={user}
+        />
+      )}
     </nav>
   );
 };

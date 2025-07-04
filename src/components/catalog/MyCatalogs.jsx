@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Check } from 'lucide-react';
+import { Check, Trash2 } from 'lucide-react';
 import './MyCatalogs.css';
 import Button from '../common/Button';
 import { Download as DownloadIcon, Share2 } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
-import { getMyCatalogs } from '../../services/catalogService';
+import { getMyCatalogs, deleteCatalog } from '../../services/catalogService';
 //import { useToast } from '../../contexts/ToastContext';
 
 const MyCatalogs = () => {
@@ -12,7 +12,11 @@ const MyCatalogs = () => {
   const [catalogs, setCatalogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [qrCodeData, setQrCodeData] = useState(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [catalogToDelete, setCatalogToDelete] = useState(null);
+  const [deleting, setDeleting] = useState(false);
   const location = useLocation();
+  const [socialLinks, setSocialLinks] = useState({ instagram: '', facebook: '', whatsapp: '' });
   //const { showError } = useToast();
 
   useEffect(() => {
@@ -42,21 +46,89 @@ const MyCatalogs = () => {
     fetchCatalogs();
   }, []);
 
-  // Get the first image URL from images_info array
-  const getFirstImageUrl = (imagesInfo) => {
-    if (!imagesInfo || !Array.isArray(imagesInfo) || imagesInfo.length === 0) {
-      return null;
+  useEffect(() => {
+    async function fetchProfile() {
+      try {
+        const res = await fetch('/profile', { credentials: 'include' });
+        const data = await res.json();
+        setSocialLinks({
+          instagram: data.instagram || '',
+          facebook: data.facebook || '',
+          whatsapp: data.whatsapp || '',
+        });
+      } catch (e) {
+        // ignore
+      }
     }
-    return imagesInfo[0].image_url;
-  };
+    fetchProfile();
+  }, []);
 
-  // Clean catalog name by removing timestamp
-  const getCleanName = (name) => {
-    if (!name) return 'Catalog';
+  // Get the thumbnail image URL from template object
+    const getFirstImageUrl = (catalog) => {
+      if (!catalog || !catalog.template || !catalog.template.thumbnail_image) {
+        return null;
+      }
+      return catalog.template.thumbnail_image;
+    };
+
+  // Get clean template name from catalog object
+  const getCleanName = (catalog) => {
+    if (!catalog || !catalog.template || !catalog.template.name) {
+      return 'Catalog';
+    }
     
+    const name = catalog.template.name;
     // Remove timestamp pattern: "YYYY-MM-DD HH:MM:SS" or "YYYY-MM-DD"
     const cleanName = name.replace(/\s+\d{4}-\d{2}-\d{2}(\s+\d{2}:\d{2}:\d{2})?$/, '');
     return cleanName || 'Catalog';
+  };
+
+  // Handle delete button click
+  const handleDeleteClick = (catalog) => {
+    setCatalogToDelete(catalog);
+    setShowDeleteConfirm(true);
+  };
+
+  // Handle delete confirmation
+  const handleDeleteConfirm = async () => {
+    if (!catalogToDelete) return;
+    
+    try {
+      setDeleting(true);
+      await deleteCatalog(catalogToDelete.id);
+      
+      // Remove the deleted catalog from the list
+      setCatalogs(prevCatalogs => prevCatalogs.filter(cat => cat.id !== catalogToDelete.id));
+      
+      // If the deleted catalog was the primary one, clear primary selection
+      if (primaryId === catalogToDelete.id) {
+        setPrimaryId(null);
+      }
+      
+      // If the deleted catalog was the QR code data source, update QR code data
+      if (qrCodeData && qrCodeData.id === catalogToDelete.id) {
+        const remainingCatalogs = catalogs.filter(cat => cat.id !== catalogToDelete.id);
+        if (remainingCatalogs.length > 0) {
+          setQrCodeData(remainingCatalogs[0]);
+        } else {
+          setQrCodeData(null);
+        }
+      }
+      
+      setShowDeleteConfirm(false);
+      setCatalogToDelete(null);
+    } catch (error) {
+      console.error('Error deleting catalog:', error);
+      // showError('Failed to delete catalog. Please try again.');
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  // Handle delete cancellation
+  const handleDeleteCancel = () => {
+    setShowDeleteConfirm(false);
+    setCatalogToDelete(null);
   };
 
   if (loading) {
@@ -83,12 +155,12 @@ const MyCatalogs = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-12">
           {Array.isArray(catalogs) && catalogs.map((cat, idx) => {
             const isPrimary = primaryId === cat.id;
-            const imageUrl = getFirstImageUrl(cat.images_info);
-            const cleanName = getCleanName(cat.name);
+            const imageUrl = getFirstImageUrl(cat);
+            const cleanName = getCleanName(cat);
             
             const cardContent = (
               <div
-                className={`bg-white/70 rounded-xl shadow-sm border-2 transition-shadow transition-transform duration-300 cursor-pointer flex flex-col min-h-[180px] relative group ${isPrimary ? 'border-transparent scale-105 shadow-2xl' : 'border-gray-200 hover:border-purple-400 hover:shadow-2xl hover:scale-105'} z-10`}
+                className={`bg-white/70 rounded-xl shadow-sm border-2 transition-shadow transition-transform duration-300 cursor-pointer flex flex-col min-h-[240px] relative group z-10 w-64 ${isPrimary ? 'border-transparent scale-105 shadow-2xl' : 'border-gray-200 hover:border-purple-400 hover:shadow-2xl hover:scale-105'}`}
               >
                 {/* Checkmark icon if primary, with animation and glow */}
                 {isPrimary && (
@@ -117,24 +189,50 @@ const MyCatalogs = () => {
                 <div className="py-3 text-center text-gray-900 font-medium bg-white rounded-b-xl z-10 relative">
                   {cleanName}
                 </div>
-                {/* Hover Buttons with Animation and Blur (z-20, sibling of footer) */}
-                <div className="absolute left-0 right-0 bottom-0 h-12 flex justify-center items-center gap-2 z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-white/90 rounded-b-xl shadow-md">
+                {/* Social icons: always visible, immediately below the name */}
+                <div className="flex justify-center gap-4 mt-4 mb-3 z-30">
+                  <a
+                    href={socialLinks.instagram || '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Share on Instagram"
+                    className="hover:text-pink-500 text-gray-500 text-xl"
+                  >
+                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="6" stroke="currentColor" strokeWidth="2"/><circle cx="12" cy="12" r="5" stroke="currentColor" strokeWidth="2"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor"/></svg>
+                  </a>
+                  <a
+                    href={`https://wa.me/?text=Check%20out%20this%20catalog!%20${encodeURIComponent(cat.qr_code_url || cat.pdf_url || '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Share on WhatsApp"
+                    className="hover:text-green-500 text-gray-500 text-xl"
+                  >
+                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 0-14.5 5.3L4 21l3.8-1.2A8 8 0 0 0 20 12Z" stroke="currentColor" strokeWidth="2"/><path d="M8.5 11.5c.2.5 1 1.7 2.2 2.3 1.2.6 1.5.5 1.8.5.3 0 .6-.2.7-.4l.5-.7c.1-.2.1-.4 0-.6l-.3-.5c-.1-.2-.2-.3-.4-.3l-.4-.1c-.1 0-.2 0-.3.1l-.2.2c-.1.1-.2.2-.3.2-.1 0-.2 0-.3-.1-.2-.1-.7-.3-1.2-.8-.5-.5-.7-1-.8-1.2 0-.1 0-.2.1-.3l.2-.3c.1-.2.1-.3.1-.4l-.1-.4c0-.2-.1-.3-.3-.4l-.5-.3c-.2-.1-.4-.1-.6 0l-.7.5c-.2.1-.4.4-.4.7 0 .3-.1.6.5 1.8Z" stroke="currentColor" strokeWidth="2"/></svg>
+                  </a>
+                  <a
+                    href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(cat.qr_code_url || cat.pdf_url || '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Share on Facebook"
+                    className="hover:text-blue-600 text-gray-500 text-xl"
+                  >
+                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="6" stroke="currentColor" strokeWidth="2"/><path d="M15 8h-2a1 1 0 0 0-1 1v2h3l-.5 2H12v6" stroke="currentColor" strokeWidth="2"/></svg>
+                  </a>
+                </div>
+                {/* Action buttons: only visible on hover, below the social icons */}
+                <div className="flex justify-center items-center gap-2 mb-3 transition-opacity duration-200 opacity-0 group-hover:opacity-100">
                   <button
-                    className="relative z-10 px-3 py-1 bg-purple-600 text-white rounded hover:bg-purple-700 text-xs font-medium shadow
-                      -translate-x-10 group-hover:translate-x-0
-                      transition-all duration-300 ease-out pointer-events-auto"
-                    style={{ transitionProperty: 'opacity, transform' }}
+                    className="relative z-10 px-3 py-1 bg-purple-600 text-white rounded hover:bg-purple-700 text-xs font-medium shadow transition-all duration-300 ease-out pointer-events-auto"
                     onClick={() => setPrimaryId(cat.id)}
                   >
                     Set as Primary
                   </button>
                   <button
-                    className="relative z-10 px-3 py-1 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 text-xs font-medium shadow
-                      translate-x-10 group-hover:translate-x-0
-                      transition-all duration-300 ease-out pointer-events-auto"
-                    style={{ transitionProperty: 'opacity, transform' }}
+                    className="relative z-10 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-xs font-medium shadow transition-all duration-300 ease-out pointer-events-auto"
+                    onClick={() => handleDeleteClick(cat)}
                   >
-                    Edit
+                    <Trash2 className="w-3 h-3 inline mr-1" />
+                    Delete
                   </button>
                 </div>
               </div>
@@ -142,7 +240,7 @@ const MyCatalogs = () => {
             
             return isPrimary ? (
               <div key={cat.id} className="p-[0.2rem] bg-gradient-to-r from-purple-500 via-pink-400 to-blue-500 rounded-2xl animate-gradient-spin w-full h-full relative">
-                <div className="bg-white rounded-xl shadow-lg w-full h-full flex flex-col min-h-[180px] relative group">
+                <div className="bg-white rounded-xl shadow-lg w-full h-full flex flex-col min-h-[240px] relative group w-64">
                   {/* Checkmark icon if primary, with animation and glow */}
                   <div className="absolute -top-6 left-1/2 -translate-x-1/2 z-30 flex items-center justify-center">
                     <div className="bg-white rounded-full border-2 border-purple-600 p-2 shadow-2xl ring-4 ring-purple-300/40
@@ -168,24 +266,50 @@ const MyCatalogs = () => {
                   <div className="py-3 text-center text-gray-900 font-medium bg-white rounded-b-xl z-10 relative">
                     {cleanName}
                   </div>
-                  {/* Hover Buttons with Animation and Blur (z-20, sibling of footer) */}
-                  <div className="absolute left-0 right-0 bottom-0 h-12 flex justify-center items-center gap-2 z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-white/90 rounded-b-xl shadow-md">
+                  {/* Social icons: always visible, immediately below the name */}
+                  <div className="flex justify-center gap-4 mt-4 mb-3 z-30">
+                    <a
+                      href={socialLinks.instagram || '#'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="Share on Instagram"
+                      className="hover:text-pink-500 text-gray-500 text-xl"
+                    >
+                      <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="6" stroke="currentColor" strokeWidth="2"/><circle cx="12" cy="12" r="5" stroke="currentColor" strokeWidth="2"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor"/></svg>
+                    </a>
+                    <a
+                      href={`https://wa.me/?text=Check%20out%20this%20catalog!%20${encodeURIComponent(cat.qr_code_url || cat.pdf_url || '')}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="Share on WhatsApp"
+                      className="hover:text-green-500 text-gray-500 text-xl"
+                    >
+                      <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 0-14.5 5.3L4 21l3.8-1.2A8 8 0 0 0 20 12Z" stroke="currentColor" strokeWidth="2"/><path d="M8.5 11.5c.2.5 1 1.7 2.2 2.3 1.2.6 1.5.5 1.8.5.3 0 .6-.2.7-.4l.5-.7c.1-.2.1-.4 0-.6l-.3-.5c-.1-.2-.2-.3-.4-.3l-.4-.1c-.1 0-.2 0-.3.1l-.2.2c-.1.1-.2.2-.3.2-.1 0-.2 0-.3-.1-.2-.1-.7-.3-1.2-.8-.5-.5-.7-1-.8-1.2 0-.1 0-.2.1-.3l.2-.3c.1-.2.1-.3.1-.4l-.1-.4c0-.2-.1-.3-.3-.4l-.5-.3c-.2-.1-.4-.1-.6 0l-.7.5c-.2.1-.4.4-.4.7 0 .3-.1.6.5 1.8Z" stroke="currentColor" strokeWidth="2"/></svg>
+                    </a>
+                    <a
+                      href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(cat.qr_code_url || cat.pdf_url || '')}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="Share on Facebook"
+                      className="hover:text-blue-600 text-gray-500 text-xl"
+                    >
+                      <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="6" stroke="currentColor" strokeWidth="2"/><path d="M15 8h-2a1 1 0 0 0-1 1v2h3l-.5 2H12v6" stroke="currentColor" strokeWidth="2"/></svg>
+                    </a>
+                  </div>
+                  {/* Action buttons: only visible on hover, below the social icons */}
+                  <div className="flex justify-center items-center gap-2 mb-3 transition-opacity duration-200 opacity-0 group-hover:opacity-100">
                     <button
-                      className="relative z-10 px-3 py-1 bg-purple-600 text-white rounded hover:bg-purple-700 text-xs font-medium shadow
-                        -translate-x-10 group-hover:translate-x-0
-                        transition-all duration-300 ease-out pointer-events-auto"
-                      style={{ transitionProperty: 'opacity, transform' }}
+                      className="relative z-10 px-3 py-1 bg-purple-600 text-white rounded hover:bg-purple-700 text-xs font-medium shadow transition-all duration-300 ease-out pointer-events-auto"
                       onClick={() => setPrimaryId(cat.id)}
                     >
                       Set as Primary
                     </button>
                     <button
-                      className="relative z-10 px-3 py-1 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 text-xs font-medium shadow
-                        translate-x-10 group-hover:translate-x-0
-                        transition-all duration-300 ease-out pointer-events-auto"
-                      style={{ transitionProperty: 'opacity, transform' }}
+                      className="relative z-10 px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-xs font-medium shadow transition-all duration-300 ease-out pointer-events-auto"
+                      onClick={() => handleDeleteClick(cat)}
                     >
-                      Edit
+                      <Trash2 className="w-3 h-3 inline mr-1" />
+                      Delete
                     </button>
                   </div>
                 </div>
@@ -236,6 +360,47 @@ const MyCatalogs = () => {
           </div>
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 max-w-md w-full mx-4 shadow-2xl">
+            <div className="flex items-center mb-4">
+              <div className="bg-red-100 rounded-full p-2 mr-3">
+                <Trash2 className="w-6 h-6 text-red-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900">Delete Catalog</h3>
+            </div>
+            <p className="text-gray-600 mb-6">
+              Are you sure you want to delete "{catalogToDelete ? getCleanName(catalogToDelete) : 'this catalog'}"? 
+              This action cannot be undone.
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={handleDeleteCancel}
+                disabled={deleting}
+                className="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteConfirm}
+                disabled={deleting}
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors disabled:opacity-50 flex items-center"
+              >
+                {deleting ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                    Deleting...
+                  </>
+                ) : (
+                  'Delete'
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

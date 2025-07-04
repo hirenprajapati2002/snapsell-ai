@@ -12,6 +12,7 @@ import FestivalTemplatesPage from '../pages/FestivalTemplatesPage';
 import PredefinedTemplatesPage from '../pages/PredefinedTemplatesPage';
 import CatalogPage from '../pages/CatalogPage';
 import CampaignsPage from '../pages/CampaignsPage';
+import TemplateSelectionPage from '../pages/TemplateSelectionPage';
 
 const AppRoutes = () => {
   return (
@@ -29,6 +30,7 @@ const AppRoutes = () => {
       <Route path="/catalogs" element={<CatalogPage />} />
       <Route path="/create-catalog" element={<CreatePage />} />
       <Route path="/campaigns" element={<CampaignsPage />} />
+      <Route path="/select-template" element={<TemplateSelectionPage />} />
     </Routes>
   );
 };

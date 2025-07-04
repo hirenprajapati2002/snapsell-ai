@@ -7,7 +7,7 @@ const ImageUploadStep = ({ uploadedImages, setUploadedImages, onNext }) => {
     const [dragOver, setDragOver] = useState(false);
     const [error, setError] = useState('');
 
-    const MAX_IMAGES = 5;
+    const MAX_IMAGES = 6;
     const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
     const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
 
@@ -26,7 +26,7 @@ const ImageUploadStep = ({ uploadedImages, setUploadedImages, onNext }) => {
         const fileArray = Array.from(files);
 
         if (uploadedImages.length + fileArray.length > MAX_IMAGES) {
-            setError(`You can only upload up to ${MAX_IMAGES} images.`);
+            setError('Maximum 6 images allowed.');
             return;
         }
 
@@ -135,7 +135,7 @@ const ImageUploadStep = ({ uploadedImages, setUploadedImages, onNext }) => {
                             Drag and drop your images here, or click to browse
                         </p>
                         <p className="text-sm text-gray-500">
-                            Maximum {MAX_IMAGES} images • JPEG, PNG, WebP • Max 10MB each
+                            Maximum 6 images • JPEG, PNG, WebP • Max 10MB each
                         </p>
                     </div>
 
@@ -169,7 +169,7 @@ const ImageUploadStep = ({ uploadedImages, setUploadedImages, onNext }) => {
                 <div className="space-y-4">
                     <div className="flex items-center justify-between">
                         <h4 className="text-lg font-semibold text-gray-900">
-                            Uploaded Images ({uploadedImages.length}/{MAX_IMAGES})
+                            Uploaded Images ({uploadedImages.length}/6)
                         </h4>
                     </div>
 
