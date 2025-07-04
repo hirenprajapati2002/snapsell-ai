@@ -36,7 +36,7 @@ const CampaignGenerator = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] h-[calc(100vh-4rem)] bg-gradient-to-br from-gray-50 to-white px-4 py-8 overflow-hidden">
+    <div className="flex flex-col items-center justify-center px-4 py-8 overflow-hidden ">
       <div className="w-full max-w-2xl bg-white rounded-2xl shadow-xl p-10 flex flex-col items-center">
         <h2 className="text-4xl font-extrabold text-center mb-8 text-gray-900 tracking-tight">Generate Marketing Campaign</h2>
         <form onSubmit={handleSubmit} className="space-y-7 w-full">

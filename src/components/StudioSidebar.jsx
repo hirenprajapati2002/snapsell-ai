@@ -78,7 +78,7 @@ const StudioSidebar = () => {
   };
 
   return (
-    <aside className="w-60 bg-white h-[calc(100vh-4rem)] border-r px-4 py-6 flex flex-col justify-between fixed top-16 left-0 z-20">
+    <aside className="w-60 bg-white border-r px-4 py-6 h-full flex flex-col justify-between fixed top-16 left-0 z-20 ">
       <div>
         {/* Logo */}
         {/* <div className="mb-8 flex items-center text-2xl font-extrabold text-gray-800">

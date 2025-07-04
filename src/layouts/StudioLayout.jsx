@@ -4,7 +4,7 @@ import StudioNavbar from "../components/StudioNavbar";
 
 const StudioLayout = ({ children }) => {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className=" bg-gray-50 min-h-screen">
       <StudioNavbar />
       <div className="flex pt-16">
         <StudioSidebar />
