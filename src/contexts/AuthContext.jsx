@@ -88,7 +88,6 @@ export const AuthProvider = ({ children }) => {
 
                 // Show welcome tooltip and redirect to create page
                 setTimeout(() => {
-                    alert("Welcome! Let's create your first product poster!");
                     window.location.href = '/create';
                 }, 500);
 
@@ -131,6 +130,7 @@ export const AuthProvider = ({ children }) => {
         } catch (error) {
             console.error('Logout error:', error);
         } finally {
+            console.log("insid finaly context")
             setUser(null);
         }
     };

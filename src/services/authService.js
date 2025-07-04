@@ -170,7 +170,9 @@ export const authService = {
     // Logout API call
     logout: async () => {
         try {
+             localStorage.removeItem('authToken');
             await apiClient.post('/logout');
+           
         } catch (error) {
             console.error('Logout error:', error);
         } finally {
