@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import Button from './common/Button';
 import { updateProfile } from '../services/profileService';
+import whatsappIcon from '../assets/images/social-icons/whatsapp.svg';
+import instagramIcon from '../assets/images/social-icons/instagram.svg';
+import facebookIcon from '../assets/images/social-icons/facebook.svg';
 
 const ProfileUpdateModal = ({ isOpen, onClose, user }) => {
   const [email] = useState(user?.email || '');
@@ -11,7 +14,7 @@ const ProfileUpdateModal = ({ isOpen, onClose, user }) => {
   const [storeImage, setStoreImage] = useState(user?.store_image || null);
   const [storeImageFile, setStoreImageFile] = useState(null);
   const [facebook, setFacebook] = useState(user?.facebook || '');
-  const [twitter, setTwitter] = useState(user?.twitter || '');
+  const [whatsapp, setWhatsapp] = useState(user?.whatsapp || '');
   const [instagram, setInstagram] = useState(user?.instagram || '');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -48,7 +51,7 @@ const ProfileUpdateModal = ({ isOpen, onClose, user }) => {
       formData.append('store_description', storeDescription);
       if (storeImageFile) formData.append('store_image', storeImageFile);
       formData.append('facebook', facebook);
-      formData.append('twitter', twitter);
+      formData.append('whatsapp', whatsapp);
       formData.append('instagram', instagram);
 
       const response = await updateProfile(formData);
@@ -119,7 +122,9 @@ const ProfileUpdateModal = ({ isOpen, onClose, user }) => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
             <div>
-              <label className="block text-gray-700 font-medium mb-1">Facebook</label>
+              <label className="block text-gray-700 font-medium mb-1 flex items-center gap-1">
+                <img src={facebookIcon} alt="Facebook" className="w-5 h-5 inline-block" /> Facebook
+              </label>
               <input
                 type="text"
                 value={facebook}
@@ -129,17 +134,21 @@ const ProfileUpdateModal = ({ isOpen, onClose, user }) => {
               />
             </div>
             <div>
-              <label className="block text-gray-700 font-medium mb-1">Twitter</label>
+              <label className="block text-gray-700 font-medium mb-1 flex items-center gap-1">
+                <img src={whatsappIcon} alt="WhatsApp" className="w-5 h-5 inline-block" /> WhatsApp
+              </label>
               <input
                 type="text"
-                value={twitter}
-                onChange={e => setTwitter(e.target.value)}
+                value={whatsapp}
+                onChange={e => setWhatsapp(e.target.value)}
                 className="w-full border rounded px-3 py-2 text-gray-800 placeholder-gray-400"
-                placeholder="Twitter link"
+                placeholder="WhatsApp number or link"
               />
             </div>
             <div>
-              <label className="block text-gray-700 font-medium mb-1">Instagram</label>
+              <label className="block text-gray-700 font-medium mb-1 flex items-center gap-1">
+                <img src={instagramIcon} alt="Instagram" className="w-5 h-5 inline-block" /> Instagram
+              </label>
               <input
                 type="text"
                 value={instagram}
@@ -166,4 +175,4 @@ const ProfileUpdateModal = ({ isOpen, onClose, user }) => {
   );
 };
 
-export default ProfileUpdateModal; 
+export default ProfileUpdateModal;

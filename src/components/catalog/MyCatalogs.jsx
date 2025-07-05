@@ -5,6 +5,9 @@ import Button from '../common/Button';
 import { Download as DownloadIcon, Share2 } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 import { getMyCatalogs, deleteCatalog } from '../../services/catalogService';
+import whatsappIcon from '../../assets/images/social-icons/whatsapp.svg';
+import instagramIcon from '../../assets/images/social-icons/instagram.svg';
+import facebookIcon from '../../assets/images/social-icons/facebook.svg';
 //import { useToast } from '../../contexts/ToastContext';
 
 const MyCatalogs = () => {
@@ -198,7 +201,7 @@ const MyCatalogs = () => {
                     title="Share on Instagram"
                     className="hover:text-pink-500 text-gray-500 text-xl"
                   >
-                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="6" stroke="currentColor" strokeWidth="2"/><circle cx="12" cy="12" r="5" stroke="currentColor" strokeWidth="2"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor"/></svg>
+                    <img src={instagramIcon} alt="Instagram" className="w-6 h-6" />
                   </a>
                   <a
                     href={`https://wa.me/?text=Check%20out%20this%20catalog!%20${encodeURIComponent(cat.qr_code_url || cat.pdf_url || '')}`}
@@ -207,7 +210,7 @@ const MyCatalogs = () => {
                     title="Share on WhatsApp"
                     className="hover:text-green-500 text-gray-500 text-xl"
                   >
-                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 0-14.5 5.3L4 21l3.8-1.2A8 8 0 0 0 20 12Z" stroke="currentColor" strokeWidth="2"/><path d="M8.5 11.5c.2.5 1 1.7 2.2 2.3 1.2.6 1.5.5 1.8.5.3 0 .6-.2.7-.4l.5-.7c.1-.2.1-.4 0-.6l-.3-.5c-.1-.2-.2-.3-.4-.3l-.4-.1c-.1 0-.2 0-.3.1l-.2.2c-.1.1-.2.2-.3.2-.1 0-.2 0-.3-.1-.2-.1-.7-.3-1.2-.8-.5-.5-.7-1-.8-1.2 0-.1 0-.2.1-.3l.2-.3c.1-.2.1-.3.1-.4l-.1-.4c0-.2-.1-.3-.3-.4l-.5-.3c-.2-.1-.4-.1-.6 0l-.7.5c-.2.1-.4.4-.4.7 0 .3-.1.6.5 1.8Z" stroke="currentColor" strokeWidth="2"/></svg>
+                    <img src={whatsappIcon} alt="WhatsApp" className="w-6 h-6" />
                   </a>
                   <a
                     href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(cat.qr_code_url || cat.pdf_url || '')}`}
@@ -216,7 +219,7 @@ const MyCatalogs = () => {
                     title="Share on Facebook"
                     className="hover:text-blue-600 text-gray-500 text-xl"
                   >
-                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="6" stroke="currentColor" strokeWidth="2"/><path d="M15 8h-2a1 1 0 0 0-1 1v2h3l-.5 2H12v6" stroke="currentColor" strokeWidth="2"/></svg>
+                    <img src={facebookIcon} alt="Facebook" className="w-6 h-6" />
                   </a>
                 </div>
                 {/* Action buttons: only visible on hover, below the social icons */}
@@ -275,7 +278,7 @@ const MyCatalogs = () => {
                       title="Share on Instagram"
                       className="hover:text-pink-500 text-gray-500 text-xl"
                     >
-                      <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="6" stroke="currentColor" strokeWidth="2"/><circle cx="12" cy="12" r="5" stroke="currentColor" strokeWidth="2"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor"/></svg>
+                      <img src={instagramIcon} alt="Instagram" className="w-6 h-6" />
                     </a>
                     <a
                       href={`https://wa.me/?text=Check%20out%20this%20catalog!%20${encodeURIComponent(cat.qr_code_url || cat.pdf_url || '')}`}
@@ -284,7 +287,7 @@ const MyCatalogs = () => {
                       title="Share on WhatsApp"
                       className="hover:text-green-500 text-gray-500 text-xl"
                     >
-                      <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 0-14.5 5.3L4 21l3.8-1.2A8 8 0 0 0 20 12Z" stroke="currentColor" strokeWidth="2"/><path d="M8.5 11.5c.2.5 1 1.7 2.2 2.3 1.2.6 1.5.5 1.8.5.3 0 .6-.2.7-.4l.5-.7c.1-.2.1-.4 0-.6l-.3-.5c-.1-.2-.2-.3-.4-.3l-.4-.1c-.1 0-.2 0-.3.1l-.2.2c-.1.1-.2.2-.3.2-.1 0-.2 0-.3-.1-.2-.1-.7-.3-1.2-.8-.5-.5-.7-1-.8-1.2 0-.1 0-.2.1-.3l.2-.3c.1-.2.1-.3.1-.4l-.1-.4c0-.2-.1-.3-.3-.4l-.5-.3c-.2-.1-.4-.1-.6 0l-.7.5c-.2.1-.4.4-.4.7 0 .3-.1.6.5 1.8Z" stroke="currentColor" strokeWidth="2"/></svg>
+                      <img src={whatsappIcon} alt="WhatsApp" className="w-6 h-6" />
                     </a>
                     <a
                       href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(cat.qr_code_url || cat.pdf_url || '')}`}
@@ -293,7 +296,7 @@ const MyCatalogs = () => {
                       title="Share on Facebook"
                       className="hover:text-blue-600 text-gray-500 text-xl"
                     >
-                      <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><rect width="20" height="20" x="2" y="2" rx="6" stroke="currentColor" strokeWidth="2"/><path d="M15 8h-2a1 1 0 0 0-1 1v2h3l-.5 2H12v6" stroke="currentColor" strokeWidth="2"/></svg>
+                      <img src={facebookIcon} alt="Facebook" className="w-6 h-6" />
                     </a>
                   </div>
                   {/* Action buttons: only visible on hover, below the social icons */}
@@ -405,4 +408,4 @@ const MyCatalogs = () => {
   );
 };
 
-export default MyCatalogs; 
+export default MyCatalogs;

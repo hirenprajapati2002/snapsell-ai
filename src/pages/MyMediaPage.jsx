@@ -7,6 +7,10 @@ import { mediaService } from '../services/mediaService';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { Link } from 'react-router-dom';
 import usePrivateRoutes from '../hooks/usePrivateRoutes';
+import instagramIcon from '../assets/images/social-icons/instagram.svg';
+import facebookIcon from '../assets/images/social-icons/facebook.svg';
+import twitterIcon from '../assets/images/social-icons/twitter.svg';
+import whatsappIcon from '../assets/images/social-icons/whatsapp.svg';
 
 const MyMediaPage = () => {
     const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
@@ -15,6 +19,8 @@ const MyMediaPage = () => {
     const [mediaItems, setMediaItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [showImageModal, setShowImageModal] = useState(false);
+    const [modalImage, setModalImage] = useState(null);
 
     usePrivateRoutes(); // Protected route
 
@@ -73,11 +79,34 @@ const MyMediaPage = () => {
         }
     };
 
+    const getUserSocialLinks = () => {
+        // Replace with actual user profile data if available
+        const user = JSON.parse(localStorage.getItem('user')) || {};
+        return {
+            instagram: user.instagram || '',
+            facebook: user.facebook || '',
+            twitter: user.twitter || '',
+            whatsapp: user.whatsapp || '',
+        };
+    };
+
     const filteredMedia = mediaItems.filter(item => {
         const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesCategory = selectedCategory === 'all' || item.type === selectedCategory;
         return matchesSearch && matchesCategory;
     });
+
+    // Auto download when modalImage is set
+    useEffect(() => {
+        if (modalImage) {
+            const link = document.createElement('a');
+            link.href = modalImage.url;
+            link.download = modalImage.name || 'media-image.jpg';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    }, [modalImage]);
 
     if (loading) {
         return (
@@ -206,7 +235,11 @@ const MyMediaPage = () => {
                                                 <img
                                                     src={item.url}
                                                     alt={item.name}
-                                                    className="w-full h-full object-cover"
+                                                    className="w-full h-full object-cover cursor-pointer"
+                                                    onClick={() => {
+                                                        setModalImage(item);
+                                                        setShowImageModal(true);
+                                                    }}
                                                     onError={(e) => {
                                                         e.target.src = '/src/assets/images/1n.webp'; // Fallback image
                                                     }}
@@ -237,6 +270,28 @@ const MyMediaPage = () => {
                                         <div>
                                             <h3 className="text-sm font-medium text-gray-800 truncate">{item.name}</h3>
                                             <p className="text-xs text-gray-500">{item.uploadDate}</p>
+                                        </div>
+                                        <div className="flex items-center gap-2 mt-2">
+                                            {getUserSocialLinks().instagram && (
+                                                <a href={getUserSocialLinks().instagram} target="_blank" rel="noopener noreferrer" title="Share on Instagram">
+                                                    <img src={instagramIcon} alt="Instagram" className="w-5 h-5 hover:scale-110 transition-transform" />
+                                                </a>
+                                            )}
+                                            {getUserSocialLinks().facebook && (
+                                                <a href={getUserSocialLinks().facebook} target="_blank" rel="noopener noreferrer" title="Share on Facebook">
+                                                    <img src={facebookIcon} alt="Facebook" className="w-5 h-5 hover:scale-110 transition-transform" />
+                                                </a>
+                                            )}
+                                            {getUserSocialLinks().twitter && (
+                                                <a href={getUserSocialLinks().twitter} target="_blank" rel="noopener noreferrer" title="Share on X (Twitter)">
+                                                    <img src={twitterIcon} alt="X (Twitter)" className="w-5 h-5 hover:scale-110 transition-transform" />
+                                                </a>
+                                            )}
+                                            {getUserSocialLinks().whatsapp && (
+                                                <a href={`https://wa.me/?text=${encodeURIComponent(getUserSocialLinks().whatsapp)}`} target="_blank" rel="noopener noreferrer" title="Share on WhatsApp">
+                                                    <img src={whatsappIcon} alt="WhatsApp" className="w-5 h-5 hover:scale-110 transition-transform" />
+                                                </a>
+                                            )}
                                         </div>
                                     </div>
                                 ))}
@@ -328,6 +383,32 @@ const MyMediaPage = () => {
                             </div>
                         )}
                     </div>
+
+                    {/* Image Modal */}
+                    {showImageModal && modalImage && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 p-4">
+                            <div className="bg-white rounded-2xl shadow-xl max-w-3xl w-full flex flex-col items-center relative">
+                                <button
+                                    className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl font-bold"
+                                    onClick={() => setShowImageModal(false)}
+                                >
+                                    &times;
+                                </button>
+                                <img
+                                    src={modalImage.url}
+                                    alt={modalImage.name}
+                                    className="max-w-full max-h-[80vh] rounded-lg shadow-lg object-contain"
+                                />
+                                <a
+                                    href={modalImage.url}
+                                    download={modalImage.name || 'media-image.jpg'}
+                                    className="mt-6 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold"
+                                >
+                                    Download
+                                </a>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
