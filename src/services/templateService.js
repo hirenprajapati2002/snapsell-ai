@@ -1,6 +1,6 @@
 // src/services/templateService.js
 import apiClient from '../utils/apiClient';
-
+import axios from 'axios';
 const templateService = {
   // Fetch all templates from API
   async getTemplates() {
@@ -22,7 +22,25 @@ const templateService = {
   // Update template with new image and text
   async updateTemplate(templateId, updateData) {
     try {
-      const response = await apiClient.post(`/photoroom/templates/${templateId}`, updateData);
+      let payload;
+      for (const [key, value] of updateData.entries()) {
+        console.log("ss", key, value);
+      }
+      //   let config = {};
+      //   // If imageFile exists, use FormData
+      //    if (updateData.imageFile) {
+      //   payload = new FormData();
+      //   if (updateData.imageFile instanceof File) {
+      //     payload.append('image', updateData.image);
+      //   }
+      //   if (updateData.text) payload.append('text', updateData.text);
+      //   // Append other fields as needed
+      //   // Do NOT set Content-Type header, let browser set it for FormData
+      //   config = {};
+      // }else {
+      //   console.log("else updateData",updateData)
+      // }
+      const response = await apiClient({ url: `/photoroom/templates/${templateId}`, method: 'POST', data: updateData });
       return {
         success: true,
         data: response.data

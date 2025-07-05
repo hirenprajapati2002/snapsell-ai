@@ -15,7 +15,7 @@ export const generateImage = async (prompt, imageFile = null, model = 'gemini') 
       headers: {
         'Content-Type': 'multipart/form-data',
       },
-      timeout: 60000, // Increase timeout for image generation
+      timeout: 600000, // Increase timeout for image generation
     });
 
     return response.data;

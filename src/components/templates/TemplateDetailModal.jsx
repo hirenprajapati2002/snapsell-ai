@@ -1,9 +1,25 @@
 // src/components/templates/TemplateDetailModal.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { X, Edit3 } from 'lucide-react';
 
 const TemplateDetailModal = ({ template, onClose, onEdit }) => {
+  const [selectedImageFile, setSelectedImageFile] = useState(null);
+
   if (!template) return null;
+
+  // Handler for file input change
+  const handleImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedImageFile(e.target.files[0]);
+    }
+  };
+
+  // Handler for save (edit)
+  const handleEdit = () => {
+    // Pass the selected image file to the parent handler, do not update imageUrl here
+    onEdit({ ...template, imageFile: selectedImageFile });
+    onClose();
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -27,9 +43,6 @@ const TemplateDetailModal = ({ template, onClose, onEdit }) => {
               <p className="text-sm text-gray-600 mb-2">
                 <span className="font-medium">Name:</span> {template.name || 'Template'}
               </p>
-              <p className="text-sm text-gray-600">
-                <span className="font-medium">Text:</span> {template.text || 'No text content'}
-              </p>
             </div>
           </div>
 
@@ -49,6 +62,21 @@ const TemplateDetailModal = ({ template, onClose, onEdit }) => {
                 </div>
               )}
             </div>
+            {/* Choose Image Button */}
+            <div className="mt-4 flex flex-col items-start">
+              <label className="inline-block px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg cursor-pointer text-gray-700">
+                Choose Image
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleImageChange}
+                />
+              </label>
+              {selectedImageFile && (
+                <span className="text-xs text-gray-500 mt-1">Selected: {selectedImageFile.name}</span>
+              )}
+            </div>
           </div>
 
           {/* Action Buttons */}
@@ -60,10 +88,7 @@ const TemplateDetailModal = ({ template, onClose, onEdit }) => {
               Close
             </button>
             <button
-              onClick={() => {
-                onEdit(template);
-                onClose();
-              }}
+              onClick={handleEdit}
               className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
             >
               <Edit3 className="w-4 h-4" />
