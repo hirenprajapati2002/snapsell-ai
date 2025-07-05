@@ -224,6 +224,7 @@ const TemplateEditModal = ({ template, onClose, onSave }) => {
 
     try {
       const formData = new FormData();
+      console.log(imageFile);
       if (imageFile) {
         formData.append("image", imageFile);
       }

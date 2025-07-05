@@ -1,9 +1,11 @@
 import React from 'react';
 import { Sparkles } from 'lucide-react';
+import ParticlesBackground from './ParticlesBackground';
 
 const HeroSection = () => {
   return (
-    <section className="bg-gray-900 min-h-screen flex flex-col items-center justify-center px-6 py-20">
+    <section className="relative bg-gradient-to-br from-gray-900 via-purple-900 to-pink-700 min-h-screen flex flex-col items-center justify-center px-6 py-20">
+      <ParticlesBackground />
       <div className="max-w-4xl mx-auto text-center">
         {/* Main Heading */}
         <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">

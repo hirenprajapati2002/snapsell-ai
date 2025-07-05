@@ -66,6 +66,17 @@ const MyCatalogs = () => {
     fetchProfile();
   }, []);
 
+  useEffect(() => {
+    // If qrCodeData is null or its catalog is missing, set to first with a QR code
+    if (
+      (!qrCodeData && catalogs.length > 0) ||
+      (qrCodeData && !catalogs.find(cat => cat.id === qrCodeData.id))
+    ) {
+      const firstWithQR = catalogs.find(cat => cat.qr_code_url);
+      setQrCodeData(firstWithQR || catalogs[0] || null);
+    }
+  }, [catalogs]);
+
   // Get the thumbnail image URL from template object
     const getFirstImageUrl = (catalog) => {
       if (!catalog || !catalog.template || !catalog.template.thumbnail_image) {
@@ -226,7 +237,10 @@ const MyCatalogs = () => {
                 <div className="flex justify-center items-center gap-2 mb-3 transition-opacity duration-200 opacity-0 group-hover:opacity-100">
                   <button
                     className="relative z-10 px-3 py-1 bg-purple-600 text-white rounded hover:bg-purple-700 text-xs font-medium shadow transition-all duration-300 ease-out pointer-events-auto"
-                    onClick={() => setPrimaryId(cat.id)}
+                    onClick={() => {
+                      setPrimaryId(cat.id);
+                      setQrCodeData(cat);
+                    }}
                   >
                     Set as Primary
                   </button>
@@ -303,7 +317,10 @@ const MyCatalogs = () => {
                   <div className="flex justify-center items-center gap-2 mb-3 transition-opacity duration-200 opacity-0 group-hover:opacity-100">
                     <button
                       className="relative z-10 px-3 py-1 bg-purple-600 text-white rounded hover:bg-purple-700 text-xs font-medium shadow transition-all duration-300 ease-out pointer-events-auto"
-                      onClick={() => setPrimaryId(cat.id)}
+                      onClick={() => {
+                        setPrimaryId(cat.id);
+                        setQrCodeData(cat);
+                      }}
                     >
                       Set as Primary
                     </button>

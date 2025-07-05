@@ -13,11 +13,11 @@ const HomePage = () => {
     <>
       <Navbar />
       <HeroSection />
-      <SectionDivider color={''} />
+      {/* <SectionDivider color={''} /> */}
       <FeaturesSection />
-      <SectionDividerDown />
+      {/* <SectionDividerDown /> */}
       <PhotHero />
-      <SectionDivider color={'bg-gradient-to-r from-[#032f35] via-[#0c1634] to-[#320050] pt-0 -mt-1'} />
+      {/* <SectionDivider color={'bg-gradient-to-r from-[#032f35] via-[#0c1634] to-[#320050] pt-0 -mt-1'} /> */}
       <ToolsSection />
     </>
   );
