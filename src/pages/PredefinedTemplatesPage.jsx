@@ -50,7 +50,7 @@ const PredefinedTemplatesPage = () => {
               id: extractedId,
               name: template.name,
               imageUrl: template.url,
-              text: `${template.name} content text`,
+              text: '',
               category: template.category,
               type: 'promotional',
               description: `This is ${template.name.toLowerCase()} for ${template.category} campaigns`,

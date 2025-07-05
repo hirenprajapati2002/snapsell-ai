@@ -208,9 +208,14 @@ const TemplateEditModal = ({ template, onClose, onSave }) => {
         return;
       }
       setImageFile(file);
+      console.log("Selected file:", file);
+      console.log("e.target.result",e.target.result)
+      //setImagePreview(file);
       const reader = new FileReader();
       reader.onload = (e) => {
-        setImagePreview(e.target.result);
+        console.log("e.target.result 12",e.target.result)
+        //setImagePreview(e.target.result);
+        setImageFile(e.target.result);
       };
       reader.readAsDataURL(file);
       setError("");
@@ -223,6 +228,7 @@ const TemplateEditModal = ({ template, onClose, onSave }) => {
     setError("");
 
     try {
+      console.log("imageFile",imageFile)
       const formData = new FormData();
       if (imageFile) {
         formData.append("image", imageFile);
