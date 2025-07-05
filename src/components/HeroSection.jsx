@@ -23,7 +23,7 @@ const HeroSection = () => {
         </p>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+        {/* <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
           <button className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-lg font-semibold text-lg flex items-center space-x-2 transition-colors">
             <span>Start Creating</span>
             <Sparkles className="w-5 h-5" />
@@ -31,7 +31,7 @@ const HeroSection = () => {
           <button className="bg-gray-800 hover:bg-gray-700 text-white px-8 py-4 rounded-lg font-semibold text-lg border border-gray-600 transition-colors">
             Explore All Tools
           </button>
-        </div>
+        </div> */}
 
         {/* No Credit Card Text */}
         <p className="text-gray-500 text-sm mb-16">

@@ -86,12 +86,12 @@ const ToolsSection = () => {
                     ))}
                 </div>
 
-                <div className="flex justify-center mt-10">
+                {/* <div className="flex justify-center mt-10">
                     <button className="bg-[#7B3FF7] text-white font-semibold px-6 py-3 rounded-xl hover:bg-[#682de9] transition duration-300 flex items-center gap-2">
                         View All Tools
                         <span className="text-lg">→</span>
                     </button>
-                </div>
+                </div> */}
                 {/* Free Trial Banner */}
                 <div className="mt-16">
                     <div className="bg-gradient-to-r from-[#1a0730] to-[#120b1e] rounded-2xl px-6 md:px-12 py-8 flex flex-col md:flex-row justify-between items-center gap-6 shadow-md">
@@ -101,9 +101,9 @@ const ToolsSection = () => {
                                 Try for <span className="text-white font-extrabold">FREE</span> now!
                             </h2>
                         </div>
-                        <button className="bg-[#7B3FF7] text-white font-semibold text-sm px-6 py-3 rounded-xl hover:bg-[#682de9] transition duration-300">
+                        {/* <button className="bg-[#7B3FF7] text-white font-semibold text-sm px-6 py-3 rounded-xl hover:bg-[#682de9] transition duration-300">
                             Claim 25 FREE Photos ✨
-                        </button>
+                        </button> */}
                     </div>
                 </div>
                 {/* Marketplace Support Section */}
@@ -119,12 +119,12 @@ const ToolsSection = () => {
                         <div className="h-16 w-16 bg-white rounded-xl shadow-sm flex items-center justify-center p-3 hover:shadow-md transition-all transform hover:-translate-y-1">
                             <img src={InstagramIcon} alt="Instagram" className="h-10 w-10" />
                         </div>
-                        <div className="h-16 w-16 bg-white rounded-xl shadow-sm flex items-center justify-center p-3 hover:shadow-md transition-all transform hover:-translate-y-1">
+                        {/* <div className="h-16 w-16 bg-white rounded-xl shadow-sm flex items-center justify-center p-3 hover:shadow-md transition-all transform hover:-translate-y-1">
                             <img src={PinterestIcon} alt="Pinterest" className="h-10 w-10" />
                         </div>
                         <div className="h-16 w-16 bg-white rounded-xl shadow-sm flex items-center justify-center p-3 hover:shadow-md transition-all transform hover:-translate-y-1">
                             <img src={ShopifyIcon} alt="Shopify" className="h-10 w-10" />
-                        </div>
+                        </div> */}
                         <div className="h-16 w-16 bg-white rounded-xl shadow-sm flex items-center justify-center p-3 hover:shadow-md transition-all transform hover:-translate-y-1">
                             <img src={TwitterIcon} alt="Twitter" className="h-10 w-10" />
                         </div>
@@ -134,12 +134,12 @@ const ToolsSection = () => {
                         <div className="h-16 w-16 bg-white rounded-xl shadow-sm flex items-center justify-center p-3 hover:shadow-md transition-all transform hover:-translate-y-1">
                             <img src={AmazonIcon} alt="Amazon" className="h-10 w-10" />
                         </div>
-                        <div className="h-16 w-16 bg-white rounded-xl shadow-sm flex items-center justify-center p-3 hover:shadow-md transition-all transform hover:-translate-y-1">
+                        {/* <div className="h-16 w-16 bg-white rounded-xl shadow-sm flex items-center justify-center p-3 hover:shadow-md transition-all transform hover:-translate-y-1">
                             <img src={EtsyIcon} alt="Etsy" className="h-10 w-10" />
-                        </div>
-                        <button className="h-16 px-6 bg-gray-50 rounded-xl text-gray-600 text-sm font-medium hover:bg-gray-100 transition-colors flex items-center justify-center shadow-sm hover:shadow-md transition-all transform hover:-translate-y-1">
+                        </div> */}
+                        {/* <button className="h-16 px-6 bg-gray-50 rounded-xl text-gray-600 text-sm font-medium hover:bg-gray-100 transition-colors flex items-center justify-center shadow-sm hover:shadow-md transition-all transform hover:-translate-y-1">
                             <span className="text-[#7B3FF7] font-semibold">+12 more</span>
-                        </button>
+                        </button> */}
                     </div>                </div>
             </div>
 

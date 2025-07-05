@@ -44,12 +44,12 @@ const Navbar = () => {
             rel="noopener noreferrer"
             className="relative"
           >
-            <button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium">
+            {/* <button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg font-medium">
               Start Creating
-              {/* <span className="absolute -top-1 -right-1 bg-pink-500 text-white text-xs px-1.5 py-0.5 rounded">
+              <span className="absolute -top-1 -right-1 bg-pink-500 text-white text-xs px-1.5 py-0.5 rounded">
                 New
-              </span> */}
-            </button>
+              </span>
+            </button> */}
           </a>
           <button
             onClick={handleAuthClick}

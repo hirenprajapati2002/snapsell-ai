@@ -13,9 +13,9 @@ const PhotHeroContent = () => {
         From ads and banners to product photos and seasonal promotions, Snapsell.AI delivers
         high-converting results effortlessly.
       </p>
-      <button className="bg-[#7B61FF] text-white px-6 py-3 rounded-md font-semibold hover:bg-[#684ad1] transition">
+      {/* <button className="bg-[#7B61FF] text-white px-6 py-3 rounded-md font-semibold hover:bg-[#684ad1] transition">
         Start Creating ✨
-      </button>
+      </button> */}
     </div>
   );
 };
